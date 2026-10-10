@@ -35,15 +35,20 @@
     </div>
   </section>
 
-  <section id="drive" class="panel">
-    <h2>Drive</h2>
-    <div class="row">
-      <button>Fwd</button>
-      <button>Back</button>
-      <button>Left</button>
-      <button>Right</button>
-    </div>
-    <label>Speed <input type="range" min="0" max="100" value="50"></label>
+  <section id="input" class="panel">
+    <h2>Input</h2>
+
+    <!-- values to print in drive section -->
+    <div id = "Lthrottle">L: <span id = "Lthrottle_value">--.--</span></div>
+    <div id = "Rthrottle">R: <span id = "Rthrottle_value">--.--</span></div>
+    
+    <div id = "Ljoystick_x">X: <span id = "Ljoystick_x_value">--.--</span></div>
+    <div id = "Ljoystick_y">Y: <span id = "Ljoystick_y_value">--.--</span></div>
+
+    <!-- Controller visualization via GamePad Viewer -->
+    <iframe id="controller" src="https://app.gpv.gg/?p=1&s=0&sc=.2" frameborder="0"></iframe>
+    <script src="controller_scale.js"></script>
+    
   </section>
 
   <section id="attitude" class="panel">

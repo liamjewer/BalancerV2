@@ -39,7 +39,7 @@
     grid-template-rows: repeat(3, 1fr);
     grid-template-areas:
       "camera camera camera status"
-      "camera camera camera drive"
+      "camera camera camera input"
       "attitude pid power log";
   }
 
@@ -59,7 +59,30 @@
 
   #camera   { grid-area: camera; }
   #status   { grid-area: status; }
-  #drive    { grid-area: drive; }
+  #input {
+    grid-area: input;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 8px;
+  }
+    #input > h2 {
+      flex: 0 0 100%;
+    }
+
+    #controller {
+      padding-top: 10%;
+      flex: 0 0 100%;
+      min-height: 0;
+      border: 0;
+    }
+
+    #input > div{
+      width: calc(20% - 8px);
+      font-size: 12pt;
+    }
+
   #attitude { grid-area: attitude; }
   #pid      { grid-area: pid; }
   #power    { grid-area: power; }
@@ -97,7 +120,7 @@
       grid-template-rows: auto;
       grid-template-areas:
         "camera camera"
-        "status drive"
+        "status input"
         "attitude pid"
         "power log";
     }
