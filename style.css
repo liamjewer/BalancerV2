@@ -1,0 +1,106 @@
+  :root {
+    --blue: #4169e1;        /* royal blue */
+    --blue-dark: #1e3a8a;
+    --blue-light: #dbe4ff;
+    --bg: #0b1226;
+    --text: #eef2ff;
+    --gap: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: var(--gap);
+    padding: var(--gap);
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--blue-dark);
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+
+  /* ---- Main grid ---- */
+  main {
+    display: grid;
+    gap: var(--gap);
+    min-height: 0;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+      "camera camera camera status"
+      "camera camera camera drive"
+      "attitude pid power log";
+  }
+
+  .panel {
+    background: var(--blue-dark);
+    border: 1px solid var(--blue);
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .panel h2 { font-size: 0.9rem; color: var(--blue-light); }
+
+  #camera   { grid-area: camera; }
+  #status   { grid-area: status; }
+  #drive    { grid-area: drive; }
+  #attitude { grid-area: attitude; }
+  #pid      { grid-area: pid; }
+  #power    { grid-area: power; }
+  #log      { grid-area: log; }
+
+  .feed {
+    flex: 1;
+    min-height: 0;
+    background: #000;
+    border: 1px solid var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .feed img, .feed video { width: 100%; height: 100%; object-fit: contain; }
+
+  button, input, select {
+    font: inherit;
+    padding: 6px 10px;
+    background: var(--blue);
+    color: #fff;
+    border: 1px solid var(--blue-light);
+    border-radius: 4px;
+  }
+  button { cursor: pointer; }
+  input[type="range"] { padding: 0; }
+
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  /* ---- Tablet / phone ---- */
+  @media (max-width: 900px) {
+    body { height: auto; }
+    main {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      grid-template-areas:
+        "camera camera"
+        "status drive"
+        "attitude pid"
+        "power log";
+    }
+    #camera { min-height: 260px; }
+    .panel { min-height: 140px; }
+  }
