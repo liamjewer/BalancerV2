@@ -1,17 +1,25 @@
   :root {
-    --blue: #4169e1;        /* royal blue */
+    --blue: #4169e1;
+    /* royal blue */
     --blue-dark: #1e3a8a;
     --blue-light: #dbe4ff;
     --bg: #0b1226;
     --text: #eef2ff;
     --gap: 12px;
-  }
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-  html, body { height: 100%; }
+html,
+body {
+    height: 100%;
+}
 
-  body {
+body {
     font-family: system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -19,76 +27,123 @@
     grid-template-rows: auto 1fr;
     gap: var(--gap);
     padding: var(--gap);
-  }
+}
 
-  header {
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: var(--blue-dark);
     padding: 8px 16px;
     border-radius: 6px;
-  }
+}
+/* ---- Main grid ---- */
 
-  /* ---- Main grid ---- */
-  main {
+main {
     display: grid;
     gap: var(--gap);
     min-height: 0;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    grid-template-areas:
-      "camera camera camera status"
-      "camera camera camera input"
-      "attitude pid power log";
-  }
+    grid-template-areas: "camera camera camera status" "camera camera camera input" "attitude pid power log";
+}
 
-  .panel {
+.panel {
     background: var(--blue-dark);
     border: 1px solid var(--blue);
     border-radius: 6px;
     padding: 10px;
     display: flex;
+    position: relative;
     flex-direction: column;
     gap: 8px;
     min-height: 0;
     overflow: auto;
-  }
+}
 
-  .panel h2 { font-size: 0.9rem; color: var(--blue-light); }
+.expanded{
+  grid-area: 1 / 1 / -1 / -1 !important;
+  z-index: 10;
+}
 
-  #camera   { grid-area: camera; }
-  #status   { grid-area: status; }
-  #input {
+.panel h2 {
+    font-size: 0.9rem;
+    color: var(--blue-light);
+}
+
+.expand{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: var(--blue);
+    font-weight: bold;
+    font-size: 16pt;
+    cursor: pointer;
+}
+
+#camera {
+    grid-area: camera;
+}
+
+#status {
+    grid-area: status;
+}
+
+#input {
     grid-area: input;
+    text-align: left;
+    overflow: none;
+}
+
+#controller {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 80%;
+    aspect-ratio: 4 / 3;
+    max-width: 100%;
+    border: 0;
+}
+
+#controller_values {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+
+    display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
-    align-content: flex-start;
     gap: 8px;
-  }
-    #input > h2 {
-      flex: 0 0 100%;
-    }
 
-    #controller {
-      padding-top: 10%;
-      flex: 0 0 100%;
-      min-height: 0;
-      border: 0;
-    }
+    font-size: 12pt;
+}
 
-    #input > div{
-      width: calc(20% - 8px);
-      font-size: 12pt;
-    }
+#controller_values > div{
+    flex: 1;
+    text-align: center;
+}
 
-  #attitude { grid-area: attitude; }
-  #pid      { grid-area: pid; }
-  #power    { grid-area: power; }
-  #log      { grid-area: log; }
+#attitude {
+    grid-area: attitude;
+}
 
-  .feed {
+#pid {
+    grid-area: pid;
+}
+
+#power {
+    grid-area: power;
+}
+
+#log {
+    grid-area: log;
+}
+
+.feed {
     flex: 1;
     min-height: 0;
     background: #000;
@@ -96,34 +151,55 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .feed img, .feed video { width: 100%; height: 100%; object-fit: contain; }
+}
 
-  button, input, select {
+.feed img,
+.feed video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+button,
+input,
+select {
     font: inherit;
     padding: 6px 10px;
     background: var(--blue);
     color: #fff;
     border: 1px solid var(--blue-light);
     border-radius: 4px;
-  }
-  button { cursor: pointer; }
-  input[type="range"] { padding: 0; }
+}
 
-  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+button {
+    cursor: pointer;
+}
 
-  /* ---- Tablet / phone ---- */
-  @media (max-width: 900px) {
-    body { height: auto; }
-    main {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto;
-      grid-template-areas:
-        "camera camera"
-        "status input"
-        "attitude pid"
-        "power log";
+input[type="range"] {
+    padding: 0;
+}
+
+.row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+/* ---- Tablet / phone ---- */
+
+@media (max-width: 900px) {
+    body {
+        height: auto;
     }
-    #camera { min-height: 260px; }
-    .panel { min-height: 140px; }
-  }
+    main {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        grid-template-areas: "camera camera" "status input" "attitude pid" "power log";
+    }
+    #camera {
+        min-height: 260px;
+    }
+    .panel {
+        min-height: 140px;
+    }
+}

@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/x-icon" href="images\Leaning_Left.png">
-<title>B-V2 Terminal</title>
+<title>B-V2 Dashboard</title>
 <link rel="stylesheet" href="style.css">
+<script src="expand.js" defer></script>
 </head>
 <body>
 
 <header>
-  <strong>B-V2 Terminal</strong>
+  <strong>B-V2 Dashboard</strong>
   <span id="conn">Disconnected</span>
 </header>
 
@@ -18,6 +19,8 @@
 
   <section id="camera" class="panel">
     <h2>Camera</h2>
+    <div class="expand" onclick="expand(this)">⤢</div>
+
     <div class="feed">
       <!-- Replace with your stream, e.g. <img src="http://ROBOT_IP:8080/stream"> -->
       <span>No signal</span>
@@ -26,6 +29,8 @@
 
   <section id="status" class="panel">
     <h2>Status</h2>
+    <div class="expand" onclick="expand(this)">⤢</div>
+
     <div>Mode: <span>--</span></div>
     <div>Uptime: <span>--</span></div>
     <div>Fault: <span>None</span></div>
@@ -37,22 +42,26 @@
 
   <section id="input" class="panel">
     <h2>Input</h2>
-
-    <!-- values to print in drive section -->
-    <div id = "Lthrottle">L: <span id = "Lthrottle_value">--.--</span></div>
-    <div id = "Rthrottle">R: <span id = "Rthrottle_value">--.--</span></div>
-    
-    <div id = "Ljoystick_x">X: <span id = "Ljoystick_x_value">--.--</span></div>
-    <div id = "Ljoystick_y">Y: <span id = "Ljoystick_y_value">--.--</span></div>
+    <div class="expand" onclick="expand(this)">⤢</div>
 
     <!-- Controller visualization via GamePad Viewer -->
     <iframe id="controller" src="https://app.gpv.gg/?p=1&s=0&sc=.2" frameborder="0"></iframe>
-    <script src="controller_scale.js"></script>
+
+    <!-- values to print in drive section -->
+    <div id="controller_values">
+      <div id="Lthrottle">L: <span id = "Lthrottle_value">--.--</span></div>
+      <div id="Rthrottle">R: <span id = "Rthrottle_value">--.--</span></div>
+      
+      <div id="Ljoystick_x">X: <span id = "Ljoystick_x_value">--.--</span></div>
+      <div id="Ljoystick_y">Y: <span id = "Ljoystick_y_value">--.--</span></div>
+    </div>
     
   </section>
 
   <section id="attitude" class="panel">
     <h2>Attitude</h2>
+    <div class="expand" onclick="expand(this)">⤢</div>
+
     <div>Pitch: <span>--</span>°</div>
     <div>Roll: <span>--</span>°</div>
     <div>Yaw: <span>--</span>°</div>
@@ -60,6 +69,8 @@
 
   <section id="pid" class="panel">
     <h2>PID Tuning</h2>
+    <div class="expand" onclick="expand(this)">⤢</div>
+
     <label>Kp <input type="number" step="0.01" value="0"></label>
     <label>Ki <input type="number" step="0.01" value="0"></label>
     <label>Kd <input type="number" step="0.01" value="0"></label>
@@ -68,6 +79,8 @@
 
   <section id="power" class="panel">
     <h2>Power</h2>
+    <div class="expand" onclick="expand(this)">⤢</div>
+
     <div>Battery: <span>--</span> V</div>
     <div>Current: <span>--</span> A</div>
     <div>Motor temp: <span>--</span> °C</div>
@@ -75,6 +88,8 @@
 
   <section id="log" class="panel">
     <h2>Log</h2>
+    <div class="expand" onclick="expand(this)">⤢</div>
+
     <div>Waiting for data...</div>
   </section>
 
