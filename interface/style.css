@@ -76,9 +76,14 @@ main {
     top: 8px;
     right: 8px;
     color: var(--blue);
-    font-weight: bold;
+    font-weight: 100;
     font-size: 16pt;
     cursor: pointer;
+
+    &:hover {
+        font-weight: 900;
+        color: var(--blue-light);
+    }
 }
 
 #camera {
