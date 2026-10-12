@@ -59,6 +59,9 @@ main {
     gap: 8px;
     min-height: 0;
     overflow: auto;
+
+    scrollbar-color: var(--blue) transparent;
+    scrollbar-width: thin;
 }
 
 .expanded{
@@ -138,9 +141,19 @@ main {
 }
 
 #telemetry > h2,
-#telemetry-values {
+#telemetry_values {
   position: relative;
   z-index: 1; /*display in front of visualization*/
+}
+
+#telemetry_values {
+    direction: rtl; /*push scroll bar to LHS*/
+    overflow-y: auto;
+    font-size: 8pt;
+}
+
+#telemetry_values > div{
+    direction: ltr; /*realign content*/
 }
 
 #tilt_visualization {
@@ -172,7 +185,7 @@ main {
 .feed {
     flex: 1;
     min-height: 0;
-    background: #000;
+    background: black;
     border: 1px solid var(--blue);
     display: flex;
     align-items: center;
