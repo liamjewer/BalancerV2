@@ -58,13 +58,16 @@
     
   </section>
 
-  <section id="attitude" class="panel">
-    <h2>Attitude</h2>
+  <section id="telemetry" class="panel">
+    <h2>Telemetry</h2>
     <div class="expand" onclick="expand(this)">⤢</div>
+    
+    <div id="telemetry-values">
+      <div>Pitch:<br><span>--.--</span>°</div>
+      <div>Heading:<br><span>--.--</span>°</div>
+    </div>
 
-    <div>Pitch: <span>--</span>°</div>
-    <div>Roll: <span>--</span>°</div>
-    <div>Yaw: <span>--</span>°</div>
+    <img src="images/tilt_visualization.png" id="tilt_visualization">
   </section>
 
   <section id="pid" class="panel">
@@ -81,9 +84,9 @@
     <h2>Power</h2>
     <div class="expand" onclick="expand(this)">⤢</div>
 
-    <div>Battery: <span>--</span> V</div>
-    <div>Current: <span>--</span> A</div>
-    <div>Motor temp: <span>--</span> °C</div>
+    <div>Battery:\n<span>--</span> V</div>
+    <div>Current:\n<span>--</span> A</div>
+    <div>Motor temp:\n<span>--</span> °C</div>
   </section>
 
   <section id="log" class="panel">

@@ -45,7 +45,7 @@ main {
     min-height: 0;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    grid-template-areas: "camera camera camera status" "camera camera camera input" "attitude pid power log";
+    grid-template-areas: "camera camera camera status" "camera camera camera input" "telemetry pid power log";
 }
 
 .panel {
@@ -97,7 +97,7 @@ main {
 #input {
     grid-area: input;
     text-align: left;
-    overflow: none;
+    overflow: hidden;
 }
 
 #controller {
@@ -132,8 +132,29 @@ main {
     text-align: center;
 }
 
-#attitude {
-    grid-area: attitude;
+#telemetry {
+    grid-area: telemetry;
+    overflow: hidden;
+}
+
+#telemetry > h2,
+#telemetry-values {
+  position: relative;
+  z-index: 1; /*display in front of visualization*/
+}
+
+#tilt_visualization {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 80%;
+    aspect-ratio: 2 / 1;
+    max-width: 100%;
+    object-fit: contain;
+    transform-origin: 53% 88%; /*138.5/261.0 643.5/730.0*/
+    transform: rotate(30deg);
+    pointer-events: none;
+    z-index: 0;
 }
 
 #pid {
@@ -199,7 +220,7 @@ input[type="range"] {
     main {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
-        grid-template-areas: "camera camera" "status input" "attitude pid" "power log";
+        grid-template-areas: "camera camera" "status input" "telemetry pid" "power log";
     }
     #camera {
         min-height: 260px;
