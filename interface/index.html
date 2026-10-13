@@ -49,12 +49,37 @@
     <iframe id="controller" src="https://app.gpv.gg/?p=1&s=0&sc=0.2" frameborder="0"></iframe>
 
     <!-- values to print in drive section -->
-    <div id="controller_values">
-      <div id="Lthrottle">L: <span id = "Lthrottle_value">--.--</span></div>
-      <div id="Rthrottle">R: <span id = "Rthrottle_value">--.--</span></div>
-      
-      <div id="Ljoystick_x">X: <span id = "Ljoystick_x_value">--.--</span></div>
-      <div id="Ljoystick_y">Y: <span id = "Ljoystick_y_value">--.--</span></div>
+    <div id="input_values">
+      <!-- joysticks -->
+      <div id="Ljoystick_x">LX: <span id="Ljoystick_x_value">--.--</span></div>
+      <div id="Ljoystick_y">LY: <span id="Ljoystick_y_value">--.--</span></div>
+      <div id="Rjoystick_x">RX: <span id="Rjoystick_x_value">--.--</span></div>
+      <div id="Rjoystick_y">RY: <span id="Rjoystick_y_value">--.--</span></div>
+
+      <!-- triggers -->
+      <div id="Rtrigger">RT: <span id="Rtrigger_value">--.--</span></div>
+      <div id="Ltrigger">LT: <span id="Ltrigger_value">--.--</span></div>
+
+      <!-- bumpers -->
+      <div id="Rbumber">RB: <span id="Rbumber_value" class="indicator"></span></div>
+      <div id="Lbumber">LB: <span id="Lbumber_value" class="indicator"></span></div>
+
+      <!-- main buttons -->
+      <div id="A_button">A: <span id="A_button_indicator" class="indicator"></span></div>
+      <div id="B_button">B: <span id="B_button_indicator" class="indicator"></span></div>
+      <div id="X_button">X: <span id="X_button_indicator" class="indicator"></span></div>
+      <div id="Y_button">Y: <span id="Y_button_indicator" class="indicator"></span></div>
+
+      <!-- D-Pad -->
+      <div id="pad_up">↑: <span id="pad_up_indicator" class="indicator"></span></div>
+      <div id="pad_down">↓: <span id="pad_down_indicator" class="indicator"></span></div>
+      <div id="pad_left">←: <span id="pad_left_indicator" class="indicator"></span></div>
+      <div id="pad_right">→: <span id="pad_right_indicator" class="indicator"></span></div>
+
+      <!-- Misc Buttons -->
+      <div id="view_button">view: <span id="view_button_indicator" class="indicator"></span></div>
+      <div id="start_button">Start: <span id="start_button_indicator" class="indicator"></span></div>
+      <div id="xbox_button">Xbox: <span id="xbox_button_indicator" class="indicator"></span></div>
     </div>
     
   </section>
