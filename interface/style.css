@@ -109,23 +109,23 @@ main {
     overflow: hidden;
 }
 
-#telemetry > h2, #input > h2
-#telemetry_values, #input_values {
+#telemetry > h2, #input > h2,
+#telemetryValues, #inputValues {
   position: relative;
   z-index: 1; /*display in front of visualization*/
 }
 
-#telemetry_values, #input_values {
+#telemetryValues, #inputValues {
     direction: rtl; /*push scroll bar to LHS*/
     overflow-y: auto;
     font-size: 8pt;
 }
 
-#telemetry_values > div, #input_values > div{
+#telemetryValues > div, #inputValues > div{
     direction: ltr; /*realign content*/
 }
 
-#tilt_visualization, #controller{
+#tiltVisualization, #controller{
     position: absolute;
     right: 0;
     bottom: 0;
@@ -145,7 +145,7 @@ main {
     border-radius: 3pt;
 }
 
-#tilt_visualization {
+#tiltVisualization {
     transform-origin: 53% 88%; /*138.5/261.0 643.5/730.0*/
     transform: rotate(30deg);
 }
