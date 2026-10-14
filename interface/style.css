@@ -3,6 +3,9 @@
     /* royal blue */
     --blue-dark: #1e3a8a;
     --blue-light: #dbe4ff;
+
+    --green: #41e184;
+
     --bg: #0b1226;
     --text: #eef2ff;
     --gap: 12px;
@@ -34,9 +37,42 @@ header {
     justify-content: space-between;
     align-items: center;
     background: var(--blue-dark);
-    padding: 8px 16px;
+    padding: 4px 8px;
     border-radius: 6px;
 }
+
+#connection{
+  color: var(--green);
+  display: inline-block;
+  vertical-align: bottom;
+  box-sizing: content-box;
+  font-size: 30px;
+  width: 90pt;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#connection:not(.connected) {
+  color: red;
+  animation: disconnect 1.2s ease-in-out infinite;
+}
+
+#connection.connected {
+  animation: none;
+}
+
+#battery{
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  aspect-ratio: 500/200;
+  font-size: 8pt;
+  font-weight: bold;
+  background: url("images/battery_mask.png") center / contain no-repeat,
+              linear-gradient(90deg, var(--blue) 50%, var(--bg) 50%);
+  text-indent: 3px;
+}
+
 /* ---- Main grid ---- */
 
 main {
@@ -221,4 +257,11 @@ input[type="range"] {
     .panel {
         min-height: 140px;
     }
+}
+
+/* animations */
+
+@keyframes disconnect {
+  0%, 100% { width: 0; margin-right: 90pt;}
+  50%      { width: 90pt; margin-right: 0;}
 }
