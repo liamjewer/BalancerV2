@@ -81,7 +81,9 @@ main {
     min-height: 0;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    grid-template-areas: "camera camera camera status" "camera camera camera input" "telemetry constants power log";
+    grid-template-areas: "camera camera status status" 
+                          "camera camera constants power" 
+                          "log log telemetry input";
 }
 
 .panel {
@@ -205,14 +207,16 @@ main {
 }
 
 .feed {
-    flex: 1;
-    min-height: 0;
-    container-type: size; /* allows for use of chq and cqw */
-    background: black;
-    border: 1px solid var(--blue);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  flex: 1;
+  min-height: 0;
+  align-self: center;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  background: black;
+  border: 1px solid var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .feed img,
