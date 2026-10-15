@@ -9,8 +9,8 @@
 
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="expand.js" defer></script>
   <script src="controller_scale.js" defer></script>
+  <script src="expand.js" defer></script> <!-- requires controller_scale.js -->
 </head>
 <body>
 
@@ -26,7 +26,7 @@
 
   <section id="camera" class="panel">
     <h2>Camera</h2>
-    <div class="expand" onclick="expand(this)">⤢</div>
+    <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
     <div class="feed">
       <!-- Replace with your stream, e.g. <img src="http://ROBOT_IP:8080/stream"> -->
@@ -36,7 +36,7 @@
 
   <section id="status" class="panel">
     <h2>Status</h2>
-    <div class="expand" onclick="expand(this)">⤢</div>
+    <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
     <div>Mode: <span>--</span></div>
     <div>Uptime: <span>--</span></div>
@@ -49,7 +49,7 @@
 
   <section id="input" class="panel">
     <h2>Input</h2>
-    <div class="expand" onclick="expand(this)">⤢</div>
+    <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
     <!-- Controller visualization via GamePad Viewer -->
     <iframe id="controller" src="https://app.gpv.gg/?p=1&s=0&sc=0.2" frameborder="0"></iframe>
@@ -92,7 +92,7 @@
 
   <section id="telemetry" class="panel">
     <h2>Telemetry</h2>
-    <div class="expand" onclick="expand(this)">⤢</div>
+    <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
     
     <div id="telemetryValues">
       <div>Pitch:<br><span>--.--</span>°</div>
@@ -105,19 +105,16 @@
     <img src="images/tilt_visualization.png" id="tiltVisualization">
   </section>
 
-  <section id="pid" class="panel">
+  <section id="constants" class="panel">
     <h2>PID Tuning</h2>
-    <div class="expand" onclick="expand(this)">⤢</div>
+    <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
-    <label>Kp <input type="number" step="0.01" value="0"></label>
-    <label>Ki <input type="number" step="0.01" value="0"></label>
-    <label>Kd <input type="number" step="0.01" value="0"></label>
-    <button>Apply</button>
+    <button>Push"</button>
   </section>
 
   <section id="power" class="panel">
     <h2>Power</h2>
-    <div class="expand" onclick="expand(this)">⤢</div>
+    <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
     <div>Battery:\n<span>--</span> V</div>
     <div>Current:\n<span>--</span> A</div>
@@ -126,7 +123,7 @@
 
   <section id="log" class="panel">
     <h2>Log</h2>
-    <div class="expand" onclick="expand(this)">⤢</div>
+    <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
     <div>Waiting for data...</div>
   </section>

@@ -81,7 +81,7 @@ main {
     min-height: 0;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    grid-template-areas: "camera camera camera status" "camera camera camera input" "telemetry pid power log";
+    grid-template-areas: "camera camera camera status" "camera camera camera input" "telemetry constants power log";
 }
 
 .panel {
@@ -104,6 +104,11 @@ main {
   grid-area: 1 / 1 / -1 / -1 !important;
   z-index: 10;
 }
+
+.expanded > #telemetryValues, 
+  .expanded > #inputValues {
+    font-size: 24pt;
+  }
 
 .panel h2 {
     font-size: 0.9rem;
@@ -149,6 +154,7 @@ main {
 #telemetryValues, #inputValues {
   position: relative;
   z-index: 1; /*display in front of visualization*/
+  width: fit-content;
 }
 
 #telemetryValues, #inputValues {
@@ -165,7 +171,7 @@ main {
     position: absolute;
     right: 0;
     bottom: 0;
-    height: 80%;
+    height: 100%;
     aspect-ratio: 2 / 1;
     max-width: 100%;
     object-fit: contain;
@@ -186,8 +192,8 @@ main {
     transform: rotate(30deg);
 }
 
-#pid {
-    grid-area: pid;
+#constants {
+    grid-area: constants;
 }
 
 #power {
@@ -201,6 +207,7 @@ main {
 .feed {
     flex: 1;
     min-height: 0;
+    container-type: size; /* allows for use of chq and cqw */
     background: black;
     border: 1px solid var(--blue);
     display: flex;
@@ -210,9 +217,10 @@ main {
 
 .feed img,
 .feed video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    aspect-ratio: 16 / 9;
+    width: min(100cqw, 100cqh * 16 / 9);  /* largest 16:9 box that fits inside .feed (chq is container height units) */
+    height: auto;
+    object-fit: cover;
 }
 
 button,
@@ -249,7 +257,7 @@ input[type="range"] {
     main {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
-        grid-template-areas: "camera camera" "status input" "telemetry pid" "power log";
+        grid-template-areas: "camera camera" "status input" "telemetry constants" "power log";
     }
     #camera {
         min-height: 260px;

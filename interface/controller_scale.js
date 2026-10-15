@@ -1,6 +1,8 @@
+scaleFactor = (0.2/250);
+
 function controller_scale() {
     const controller = document.getElementById("controller");
-    controller.src = "https://app.gpv.gg/?p=1&s=0&sc=" + ((0.2/250)*controller.clientWidth);
+    controller.src = "https://app.gpv.gg/?p=1&s=0&sc=" + (scaleFactor*controller.clientWidth);
 }
 
 // event listener
