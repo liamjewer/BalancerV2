@@ -6,7 +6,7 @@
 
     --green: #41e184;
 
-    --bg: #0b1226;
+    --bg: #000000;
     --text: #eef2ff;
     --gap: 12px;
 }
@@ -69,8 +69,7 @@ header {
   aspect-ratio: 500/200;
   font-size: 8pt;
   font-weight: bold;
-  background: url("images/battery_mask.png") center / contain no-repeat,
-              linear-gradient(90deg, var(--blue) 50%, var(--bg) 50%);
+  background: linear-gradient(90deg, var(--blue) 50%, var(--bg) 50%);
   text-indent: 3px;
 }
 
@@ -201,6 +200,54 @@ main {
 
 #constants {
     grid-area: constants;
+}
+
+.table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;              /* table scrolls inside the panel */
+}
+
+.constants-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+}
+
+.constants-table th {
+  position: sticky;            /* header stays put while scrolling */
+  top: 0;
+  background: var(--blue-dark);
+  color: var(--blue-light);
+  text-align: left;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--blue);
+}
+
+.constants-table td {
+  padding: 2px 8px;
+  border-bottom: 1px solid rgba(65, 105, 225, 0.3);
+}
+
+.constants-table tbody tr:hover {
+  background: rgba(65, 105, 225, 0.15);
+}
+
+/* value cells look like plain text until focused */
+.constants-table input {
+  width: 100%;
+  padding: 2px 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text);
+  font: inherit;
+}
+
+.constants-table input:hover,
+.constants-table input:focus {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: var(--blue);
+  outline: none;
 }
 
 #power {
