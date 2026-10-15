@@ -109,7 +109,7 @@
     <h2>PID Tuning</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
-    <button>Push"</button>
+    <button id="sync" onclick="document.getElementById('syncIcon').classList.toggle('spin')"><i data-lucide="refresh-cw" id="syncIcon"></i> Sync</button>
   </section>
 
   <section id="power" class="panel">
@@ -129,6 +129,6 @@
   </section>
 
 </main>
-<script type="module" src="Icons.js"></script>
+<script type="module">lucide.createIcons();</script>
 </body>
 </html>

@@ -1,8 +1,8 @@
   :root {
-    --blue: #4169e1;
+    --blue: #006aff;
     /* royal blue */
-    --blue-dark: #1e3a8a;
-    --blue-light: #dbe4ff;
+    --blue-dark: #0e1b3f;
+    --blue-light: #559cff;
 
     --green: #41e184;
 
@@ -39,6 +39,7 @@ header {
     background: var(--blue-dark);
     padding: 4px 8px;
     border-radius: 6px;
+    border: 1px solid var(--blue);
 }
 
 #connection{
@@ -100,6 +101,10 @@ main {
 
     scrollbar-color: var(--blue) transparent;
     scrollbar-width: thin;
+}
+
+.panel:hover{
+  box-shadow: 1px 1px 5px 2px var(--blue);
 }
 
 .expanded{
@@ -234,12 +239,27 @@ select {
     padding: 6px 10px;
     background: var(--blue);
     color: #fff;
-    border: 1px solid var(--blue-light);
+    border: none;
     border-radius: 4px;
+}
+
+button:hover,
+input:hover,
+select:hover {
+     box-shadow: 0 0 5px 2px var(--blue-dark);
 }
 
 button {
     cursor: pointer;
+}
+
+#syncIcon{
+  height: 12pt;
+  transition: 1s ease-in-out;
+}
+
+.spin{
+  transform: rotate(720deg);
 }
 
 input[type="range"] {
