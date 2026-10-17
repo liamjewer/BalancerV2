@@ -5,10 +5,17 @@
     --blue-light: #559cff;
 
     --green: #41e184;
+    --red: #e14141;
 
     --bg: #000000;
     --text: #eef2ff;
     --gap: 12px;
+
+    /*functional variables*/
+    --tilt: 20deg;
+    --tiltStatusColour: var(--green);
+    --pivot-x: 53%;
+    --pivot-y: 88%;
 }
 
 * {
@@ -148,6 +155,16 @@ main {
     grid-area: input;
 }
 
+#controller{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    aspect-ratio: 2 / 1;
+    max-width: 100%;
+    pointer-events: none;
+}
+
 #telemetry {
     grid-area: telemetry;
 }
@@ -173,16 +190,54 @@ main {
     direction: ltr; /*realign content*/
 }
 
-#tiltVisualization, #controller{
+#tiltStage {
     position: absolute;
-    right: 0;
     bottom: 0;
-    height: 100%;
-    aspect-ratio: 2 / 1;
-    max-width: 100%;
-    object-fit: contain;
+    left: 50%;
+    translate: -50% 0;           /* centered; use right: 0 and drop this to push right */
+    height: 90%;
+    aspect-ratio: 261 / 730;     /* the image's own shape */
     pointer-events: none;
     z-index: 0;
+}
+
+#tiltStage > * {
+    position: absolute;
+    inset: 0;
+}
+
+#tiltVisualization {
+    width: 100%;
+    height: 100%;
+    transform-origin: var(--pivot-x) var(--pivot-y);
+    transform: rotate(var(--tilt));
+}
+
+#tiltGuide {
+    background: linear-gradient(var(--tiltStatusColour), var(--tiltStatusColour))
+                var(--pivot-x) 0 / 3px 90% no-repeat;
+}
+
+#angleIndicator {
+    inset: auto;
+    left: var(--pivot-x);
+    top: var(--pivot-y);
+    height: 100%;
+    aspect-ratio: 1;
+    translate: -50% -50%;        /* center the circle on pivot */
+    z-index: 5;
+    background: conic-gradient(
+        from min(0deg, var(--tilt)),
+        var(--tiltStatusColour) max(var(--tilt), -1 * var(--tilt)),
+        transparent 0
+    );
+    mask: radial-gradient(
+        closest-side,
+        transparent calc(100% - 4px),
+        #000 calc(100% - 3px),
+        #000 calc(100% - 1px),
+        transparent 100%
+    );
 }
 
 .indicator{
@@ -191,11 +246,6 @@ main {
     height: 6pt;
     background-color: var(--blue-light);
     border-radius: 3pt;
-}
-
-#tiltVisualization {
-    transform-origin: 53% 88%; /*138.5/261.0 643.5/730.0*/
-    transform: rotate(30deg);
 }
 
 #constants {
