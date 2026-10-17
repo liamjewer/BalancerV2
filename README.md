@@ -47,7 +47,7 @@ This repository is open-source under the terms of the [MIT License](LICENSE).
 * HMI Icons provided by [Lucide Icons](https://lucide.dev)
 
 <!-- MARKDOWN LINKS -->
-[license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2?style=for-the-badge
 [license-url]: ./LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/liam-jewer-544b7915b
