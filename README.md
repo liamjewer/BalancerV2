@@ -50,8 +50,8 @@ This repository is open-source under the terms of the [MIT License](LICENSE).
 
 <!-- MARKDOWN LINKS -->
 [license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2.svg?style=for-the-badge
-[license-url]: https://github.com/liamjewer/BalancerV2/blob/main/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[license-url]: https://github.com
+[linkedin-shield]: https://shields.io
 [linkedin-url]: https://linkedin.com/in/liam-jewer-544b7915b
-[onshape-shield]: https://img.shields.io/badge/Onshape-grey?style=for-the-badge
+[onshape-shield]: https://shields.io
 [onshape-url]: https://cad.onshape.com/documents/79de6c77069099a3c470ec91/w/1c2529a3ddeab6ff94d9cb8c/e/397ad8c1d4d84363a762f643?renderMode=0&uiState=6ad30d0d5b41021dfce36e15
