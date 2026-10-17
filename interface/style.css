@@ -61,7 +61,7 @@ header {
 }
 
 #connection:not(.connected) {
-  color: red;
+  color: var(--red);
   animation: disconnect 1.2s ease-in-out infinite;
 }
 
@@ -194,9 +194,9 @@ main {
     position: absolute;
     bottom: 0;
     left: 50%;
-    translate: -50% 0;           /* centered; use right: 0 and drop this to push right */
+    translate: -50% 0;
     height: 90%;
-    aspect-ratio: 261 / 730;     /* the image's own shape */
+    aspect-ratio: 261 / 730; /* the image's aspect ratio */
     pointer-events: none;
     z-index: 0;
 }
@@ -224,7 +224,7 @@ main {
     top: var(--pivot-y);
     height: 100%;
     aspect-ratio: 1;
-    translate: -50% -50%;        /* center the circle on pivot */
+    translate: -50% -50%; /* center the circle on pivot */
     z-index: 5;
     background: conic-gradient(
         from min(0deg, var(--tilt)),
@@ -255,7 +255,7 @@ main {
 .table-wrap {
   flex: 1;
   min-height: 0;
-  overflow: auto;              /* table scrolls inside the panel */
+  overflow: auto;
 }
 
 .constants-table {
@@ -265,7 +265,7 @@ main {
 }
 
 .constants-table th {
-  position: sticky;            /* header stays put while scrolling */
+  position: sticky; /* freeze panes */
   top: 0;
   background: var(--blue-dark);
   color: var(--blue-light);
@@ -306,6 +306,50 @@ main {
 
 #log {
     grid-area: log;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 60%;
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "console console graph"
+        "msg     send    graph";
+}
+
+#console{
+    grid-area: console;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    min-height: 0;
+    padding: 10px;
+    background-color: var(--bg);
+}
+
+#consoleMsg {
+    grid-area: msg;
+    width: 100%;
+    min-width: 0;
+    font: inherit;
+}
+
+#send{
+    grid-area: send;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+#send svg {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+#send.sent > svg{
+    animation: send 0.75s ease-in-out;
+}
+
+#graphArea{
+    grid-area: graph;
+    min-height: 0;
 }
 
 .feed {
@@ -393,4 +437,10 @@ input[type="range"] {
 @keyframes disconnect {
   0%, 100% { width: 0; margin-right: 90pt;}
   50%      { width: 90pt; margin-right: 0;}
+}
+
+@keyframes send {
+  0%        { margin-left: 0;}
+  80%       { margin-left: 200%;}
+  100%      { margin-left: 200%;}
 }

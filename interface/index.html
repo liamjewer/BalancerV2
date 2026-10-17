@@ -9,8 +9,11 @@
 
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- custom scripts -->
   <script src="controller_scale.js" defer></script>
   <script src="expand.js" defer></script> <!-- requires controller_scale.js -->
+  <script src="send.js" defer></script>
 </head>
 <body>
 
@@ -159,10 +162,15 @@
   </section>
 
   <section id="log" class="panel">
-    <h2>Log</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
-    <div>Waiting for data...</div>
+    <span id="console">Waiting for data...</span>
+    <input type="text" id="consoleMsg">
+    <button id="send"><i data-lucide="send-horizontal"></i></button>
+
+    <div id="graphArea">
+
+    </div>
   </section>
 
 </main>
