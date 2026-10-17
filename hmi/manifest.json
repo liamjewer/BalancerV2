@@ -1,0 +1,17 @@
+{
+    "id": "balancer-v2",
+    "name": "Balancer V2",
+    "short_name": "B-V2",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#006aff",
+    "icons": [
+    {
+        "src": "images/Leaning_Left.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any"
+    }
+    ]
+}

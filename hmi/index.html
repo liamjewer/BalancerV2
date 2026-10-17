@@ -7,13 +7,24 @@
 
   <title>B-V2 Dashboard</title>
 
+  <!-- setup -->
+   <link rel="manifest" href="manifest.json">
+   <script defer>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+
+  <!-- stylesheets -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- imports/libraries -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- custom scripts -->
-  <script src="controller_scale.js" defer></script>
-  <script src="expand.js" defer></script> <!-- requires controller_scale.js -->
-  <script src="send.js" defer></script>
+  <script src="scripts/controller_scale.js" defer></script>
+  <script src="scripts/expand.js" defer></script> <!-- requires controller_scale.js -->
+  <script src="scripts/send.js" defer></script>
 </head>
 <body>
 
@@ -41,8 +52,11 @@
     <h2>Status</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
-    <div>Mode: <span>--</span></div>
+    <div>State: <span>--</span></div>
     <div>Uptime: <span>--</span></div>
+    <div>latency: <span>--</span></div>
+    <div>packet loss: <span>--</span></div>
+    <div>control loop frequency: <span>--</span></div>
     <div>Fault: <span>None</span></div>
     <div class="row">
       <button>Enable</button>
@@ -152,13 +166,11 @@
     </div>
   </section>
 
-  <section id="power" class="panel">
-    <h2>Power</h2>
+  <section id="quick" class="panel">
+    <h2>Quick Access</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
-    <div>Battery:\n<span>--</span> V</div>
-    <div>Current:\n<span>--</span> A</div>
-    <div>Motor temp:\n<span>--</span> °C</div>
+    
   </section>
 
   <section id="log" class="panel">

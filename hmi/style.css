@@ -89,7 +89,7 @@ main {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
     grid-template-areas: "camera camera status status" 
-                          "camera camera constants power" 
+                          "camera camera constants quick" 
                           "log log telemetry input";
 }
 
@@ -300,8 +300,8 @@ main {
   outline: none;
 }
 
-#power {
-    grid-area: power;
+#quick {
+    grid-area: quick;
 }
 
 #log {
@@ -422,7 +422,7 @@ input[type="range"] {
     main {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
-        grid-template-areas: "camera camera" "status input" "telemetry constants" "power log";
+        grid-template-areas: "camera camera" "status input" "telemetry constants" "quick log";
     }
     #camera {
         min-height: 260px;
