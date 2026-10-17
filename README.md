@@ -1,8 +1,12 @@
 <!-- PROJECT SHIELDS -->
 [![project_license][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 [![Onshape][onshape-shield]][onshape-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
+
+
+# Balancer-V2 (B-V2)
+<img src="hmi/images/Leaning_Left.png" alt="B-V2" width="200">
 
 ## Repository Structure
 ```text
@@ -41,7 +45,7 @@ To Be Determined
 
 ## License & Acknowledgements
 This repository is open-source under the terms of the [MIT License](LICENSE).
-* Generative Artificial Intelligence was used to generate boilerplate, brainstorm ideas, and troubleshoot issues.
+* Generative Artificial Intelligence was used to generate boilerplate code, brainstorm ideas, and troubleshoot technical issues during development. Every line of code in this repository has been human-audited and verified.
 * Icons provided by [Lucide Icons](https://lucide.dev)
 
 <!-- MARKDOWN LINKS -->
