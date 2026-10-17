@@ -48,7 +48,7 @@ This repository is open-source under the terms of the [MIT License](LICENSE).
 
 <!-- MARKDOWN LINKS -->
 [license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2.svg?style=for-the-badge
-[license-url]: ./LICENSE.txt
+[license-url]: ./LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/liam-jewer-544b7915b
 [onshape-shield]: https://img.shields.io/badge/B--V2_CAD_(Onshape)-grey?style=for-the-badge
