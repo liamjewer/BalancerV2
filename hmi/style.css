@@ -147,6 +147,27 @@ main {
     grid-area: camera;
 }
 
+.feed {
+  flex: 1;
+  min-height: 0;
+  align-self: center;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  background: black;
+  border: 1px solid var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feed img,
+.feed video {
+    aspect-ratio: 16 / 9;
+    width: min(100cqw, 100cqh * 16 / 9);  /* largest 16:9 box that fits inside .feed (chq is container height units) */
+    height: auto;
+    object-fit: cover;
+}
+
 #status {
     grid-area: status;
 }
@@ -252,6 +273,15 @@ main {
     grid-area: constants;
 }
 
+#syncIcon{
+  height: 12pt;
+  transition: 1s ease-in-out;
+}
+
+.spin{
+  transform: rotate(720deg);
+}
+
 .table-wrap {
   flex: 1;
   min-height: 0;
@@ -304,6 +334,37 @@ main {
     grid-area: quick;
 }
 
+.deck {
+    position: absolute;
+    inset: 40px 10px 10px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.key {
+    min-width: 0;
+    min-height: 0;
+    padding: 2px;
+    font-size: 7pt;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.key svg {
+    height: 40%;
+    width: auto;
+}
+
+.expanded .key {
+    font-size: 16pt;
+}
+
 #log {
     grid-area: log;
     display: grid;
@@ -352,26 +413,7 @@ main {
     min-height: 0;
 }
 
-.feed {
-  flex: 1;
-  min-height: 0;
-  align-self: center;
-  aspect-ratio: 16 / 9;
-  max-width: 100%;
-  background: black;
-  border: 1px solid var(--blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.feed img,
-.feed video {
-    aspect-ratio: 16 / 9;
-    width: min(100cqw, 100cqh * 16 / 9);  /* largest 16:9 box that fits inside .feed (chq is container height units) */
-    height: auto;
-    object-fit: cover;
-}
+/* general element styles */
 
 button,
 input,
@@ -387,32 +429,18 @@ select {
 button:hover,
 input:hover,
 select:hover {
-     box-shadow: 0 0 5px 2px var(--blue-dark);
+    box-shadow: 0 0 5px 2px var(--blue-dark);
+    background-color: color-mix(in srgb, var(--blue), #000 20%);
 }
 
 button {
     cursor: pointer;
 }
 
-#syncIcon{
-  height: 12pt;
-  transition: 1s ease-in-out;
-}
-
-.spin{
-  transform: rotate(720deg);
-}
-
 input[type="range"] {
     padding: 0;
 }
 
-.row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-}
 /* ---- Tablet / phone ---- */
 
 @media (max-width: 900px) {

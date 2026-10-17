@@ -52,16 +52,17 @@
     <h2>Status</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
+    <div id="en-dis-able">
+      <button data-action="enable">Enable</button>
+      <button data-action="disable">Disable</button>
+    </div>
+
     <div>State: <span>--</span></div>
     <div>Uptime: <span>--</span></div>
     <div>latency: <span>--</span></div>
     <div>packet loss: <span>--</span></div>
     <div>control loop frequency: <span>--</span></div>
     <div>Fault: <span>None</span></div>
-    <div class="row">
-      <button>Enable</button>
-      <button>E-Stop</button>
-    </div>
   </section>
 
   <section id="input" class="panel">
@@ -170,7 +171,19 @@
     <h2>Quick Access</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
-    
+    <div class="deck">
+      <button class="key" data-action="unassigned"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
+      <button class="key" data-action="unassigned"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
+      <button class="key" data-action="unassigned"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
+
+      <button class="key" data-action="calibrate"><i data-lucide="crosshair"></i><span>Calibrate</span></button>
+      <button class="key" data-action="zero-imu"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
+      <button class="key" data-action="reset"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
+
+      <button class="key" data-action="lights"><i data-lucide="lightbulb"></i><span>Lights</span></button>
+      <button class="key" data-action="snapshot"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
+      <button class="key" data-action="shutdown"><i data-lucide="power"></i><span>Shutdown</span></button>
+  </div>
   </section>
 
   <section id="log" class="panel">
