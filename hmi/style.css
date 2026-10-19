@@ -1,6 +1,5 @@
   :root {
     --blue: #006aff;
-    /* royal blue */
     --blue-dark: #0e1b3f;
     --blue-light: #559cff;
 
@@ -9,6 +8,7 @@
 
     --bg: #000000;
     --text: #eef2ff;
+    --grey: #595959;
     --gap: 12px;
 
     /*functional variables*/
@@ -88,9 +88,9 @@ main {
     min-height: 0;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    grid-template-areas: "camera camera status status" 
+    grid-template-areas: "camera camera telemetry input" 
                           "camera camera constants quick" 
-                          "log log telemetry input";
+                          "status status log log";
 }
 
 .panel {
@@ -168,8 +168,137 @@ main {
     object-fit: cover;
 }
 
-#status {
+#status{
     grid-area: status;
+    overflow: hidden;
+}
+
+#statusContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    inset: 0;
+    z-index: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    grid-template-rows: repeat(2, 50%);
+    grid-template-areas: "en-dis-able state udp packetLoss"
+                          "en-dis-able timing tcp control";
+}
+
+#en-dis-able{
+    grid-area: en-dis-able;
+}
+
+#timing {
+    grid-area: timing;
+    padding: 15px;
+}
+
+#state {
+    grid-area: state;
+    padding: 15px;
+}
+
+#state div, #timing div {
+    font-size: 8pt;
+    padding: 5% 0;
+}
+
+#state span, #timing span {
+    font-size: 14pt;
+    padding: 5% 0;
+}
+
+#udp {
+    grid-area: udp;
+}
+
+#packetLoss {
+    grid-area: packetLoss;
+}
+
+#tcp{
+    grid-area: tcp;
+}
+
+#controlFrequency{
+    grid-area: control;
+}
+
+.gauge {
+    --sweep: 200deg;
+    --start: -100deg;
+
+    font-size: 8pt;
+    position: relative;
+    aspect-ratio: 1;
+    height: 100%;
+    width: auto;
+}
+
+.gauge h2 {
+    position: absolute;
+    font-size: 8pt;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.gauge .ticks {
+    position: absolute;
+    inset: 0;
+    background: repeating-conic-gradient(
+        from calc(var(--start) - 0.5deg),
+        var(--grey) 0 1deg,
+        transparent 0 20deg
+    );
+    mask:
+        radial-gradient(closest-side, transparent 69%, #000 70%, #000 78%, transparent 79%),
+        conic-gradient(from calc(var(--start) - 0.5deg), #000 calc(var(--sweep) + 1deg), transparent 0);
+    mask-composite: intersect;
+}
+
+.gauge .needle {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    width: 3px;
+    height: 36%;
+    border-radius: 2px;
+    background: var(--blue);
+    box-shadow: var(--blue-light) 0 0 5px;
+    transform-origin: 50% 100%;
+    transform: rotate(calc(var(--start) + var(--p) * var(--sweep)));
+    transition: transform 0.3s ease-out;
+}
+
+.gauge .hub {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--blue);
+    box-shadow: var(--blue-light) 0 0 5px;
+}
+.gauge .reading {
+    position: absolute;
+    left: 50%;
+    bottom: 5%;
+    width: 60%;
+    text-align: center;
+    translate: -50% -50%;
+    font-size: 8pt;
+    font-family: Consolas;
+    font-weight: bold;
+    white-space: nowrap;
+    color: var(--blue-light);
+    text-shadow: 0 0 2px var(--blue), 0 0 2px var(--blue);
+    padding: 5px;
+    border: 2px solid var(--blue);
 }
 
 #input {
@@ -368,11 +497,11 @@ main {
 #log {
     grid-area: log;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto 60%;
+    grid-template-columns: minmax(0, 1fr) 35% auto;
     grid-template-rows: minmax(0, 1fr) auto;
     grid-template-areas:
-        "console console graph"
-        "msg     send    graph";
+        "graph console console"
+        "graph msg     send";
 }
 
 #console{

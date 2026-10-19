@@ -49,20 +49,56 @@
   </section>
 
   <section id="status" class="panel">
-    <h2>Status</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
-    <div id="en-dis-able">
-      <button data-action="enable">Enable</button>
-      <button data-action="disable">Disable</button>
-    </div>
+    <div id="statusContainer">
+      <div id="en-dis-able">
+        <button data-action="enable">Enable</button>
+        <button data-action="disable">Disable</button>
+      </div>
 
-    <div>State: <span>--</span></div>
-    <div>Uptime: <span>--</span></div>
-    <div>latency: <span>--</span></div>
-    <div>packet loss: <span>--</span></div>
-    <div>control loop frequency: <span>--</span></div>
-    <div>Fault: <span>None</span></div>
+      <div id="timing">
+        <div><b>Uptime:</b> <br><span>--</span></div>
+        <div><b>Runtime:</b> <br><span>--</span></div>
+      </div>
+
+      <div id="state">
+        <div><b>State:</b> <br><span>--</span></div>
+        <div><b>Fault:</b> <br><span>None</span></div>
+      </div>
+
+      <div class="gauge" id="udp" style="--p: 0.7;">
+        <div class="ticks"></div>
+        <div class="needle"></div>
+        <div class="hub"></div>
+        <span class="reading">59.4 Hz</span>
+        <h2>Controller Latency (UDP)</h2>
+      </div>
+
+      <div class="gauge" id="packetLoss" style="--p: 0.3;">
+        <div class="ticks"></div>
+        <div class="needle"></div>
+        <div class="hub"></div>
+        <span class="reading">1 %</span>
+        <h2>Packet Loss</h2>
+      </div>
+
+      <div class="gauge" id="tcp" style="--p: 0.25;">
+        <div class="ticks"></div>
+        <div class="needle"></div>
+        <div class="hub"></div>
+        <span class="reading">59.4 Hz</span>
+        <h2>Data Latency (TCP)</h2>
+      </div>
+      
+      <div class="gauge" id="controlFrequency" style="--p: 0.1;">
+        <div class="ticks"></div>
+        <div class="needle"></div>
+        <div class="hub"></div>
+        <span class="reading">59.4 Hz</span>
+        <h2>Control Loop Frequency</h2>
+      </div>
+    </div>
   </section>
 
   <section id="input" class="panel">
@@ -189,13 +225,13 @@
   <section id="log" class="panel">
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
-    <span id="console">Waiting for data...</span>
-    <input type="text" id="consoleMsg">
-    <button id="send"><i data-lucide="send-horizontal"></i></button>
-
     <div id="graphArea">
 
     </div>
+
+    <span id="console">Waiting for data...</span>
+    <input type="text" id="consoleMsg">
+    <button id="send"><i data-lucide="send-horizontal"></i></button>
   </section>
 
 </main>
