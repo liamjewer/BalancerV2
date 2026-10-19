@@ -591,6 +591,57 @@ main {
     min-height: 0;
 }
 
+#graphContainer{
+    height: 80%;
+    width: 100%;
+}
+
+#dataChart{
+    padding: 10px 15px;
+}
+
+#recordingTime{
+    display: inline-block;
+    padding: 0 10px;
+    width: 100px
+}
+
+#selections {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 6px;
+    padding: 25px 5px;
+}
+
+#selections label {
+    padding: 4px 10px;
+    font-size: 8pt;
+    font-family: Consolas, monospace;
+    color: var(--blue-light);
+    background: var(--bg);
+    border: 1px solid var(--blue);
+    border-radius: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s, color 0.15s;
+}
+
+#selections label:hover {
+    box-shadow: 0 0 5px 2px var(--blue-dark);
+}
+
+/* hide the native checkbox, the chip itself is the control */
+#selections input {
+    display: none;
+}
+
+/* checked state */
+#selections label:has(input:checked) {
+    background: var(--blue);
+    color: #fff;
+}
+
 /* general element styles */
 
 button,

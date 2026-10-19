@@ -20,11 +20,13 @@
 
   <!-- imports/libraries -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- custom scripts -->
   <script src="scripts/controller_scale.js" defer></script>
   <script src="scripts/expand.js" defer></script> <!-- requires controller_scale.js -->
   <script src="scripts/send.js" defer></script>
+  <script src="scripts/graphing.js" defer></script>
 </head>
 <body>
 
@@ -223,7 +225,19 @@
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
     <div id="graphArea">
+      <!-- chart via Chart.js -->
+      <div id="graphContainer"><canvas id="dataChart"></canvas></div>
 
+      <button id="start">Start</button>
+      <span id="recordingTime">--:--</span>
+      <button id="start">Save CSV</button>
+
+      <div id="selections">
+        <label><input type="checkbox" value="lMotorSpeed" checked="true" onchange="">lMotorSpeed</label>
+        <label><input type="checkbox" value="rMotorSpeed" onchange="">rMotorSpeed</label>
+        <label><input type="checkbox" value="rMotorSetpoint" onchange="">rMotorSetpoint</label>
+        <label><input type="checkbox" value="lMotorSetpoint" onchange="">lMotorSetpoint</label>
+      </div>
     </div>
 
     <span id="console">Waiting for data...</span>

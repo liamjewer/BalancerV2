@@ -44,7 +44,8 @@ To Be Determined
 ## License & Acknowledgements
 This repository is open-source under the terms of the [MIT License](LICENSE).
 * Generative Artificial Intelligence was used to generate boilerplate code, brainstorm ideas, and troubleshoot technical issues during development. Every line of code in this repository has been human-audited and verified.
-* HMI Icons provided by [Lucide Icons](https://lucide.dev)
+* HMI icons provided by [Lucide Icons](https://lucide.dev)
+* Data charting provided by [Chart.js](https://www.chartjs.org)
 
 <!-- MARKDOWN LINKS -->
 [license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2?style=for-the-badge
