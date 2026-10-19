@@ -183,12 +183,60 @@ main {
     display: grid;
     grid-template-columns: repeat(4, 25%);
     grid-template-rows: repeat(2, 50%);
-    grid-template-areas: "en-dis-able state udp packetLoss"
-                          "en-dis-able timing tcp control";
+    grid-template-areas: "enabled state udp packetLoss"
+                          "enabled timing tcp control";
 }
 
-#en-dis-able{
-    grid-area: en-dis-able;
+#enabled {
+    grid-area: enabled;
+    appearance: none;
+    position: relative;
+    width: 90%;
+    height: 90%;
+    inset: 5%;
+    margin: 0;
+    padding: 0;
+    border-radius: 20px;
+    background: var(--bg);
+    cursor: pointer;
+    container-type: size; 
+}
+
+/* slider */
+#enabled::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    top: 3px;
+    height: calc(50% - 3px);
+    border-radius: 16px;
+    background: var(--grey);
+    translate: 0 100%;
+    transition: translate 0.2s ease-out;
+}
+
+#enabled::after {
+    content: "Enabled\A Disabled";
+    position: absolute;
+    inset: 3px;
+    white-space: pre;
+    text-align: center;
+    font-weight: bold;
+    line-height: calc((100cqh - 6px) / 2);
+    background: linear-gradient(var(--grey) 50%, var(--red) 50%);
+    background-clip: text;
+    color: transparent;
+    pointer-events: none;
+}
+
+#enabled:checked::before {
+    translate: 0 0;
+}
+
+#enabled:checked::after {
+    background: linear-gradient(var(--green) 50%, #6b7280 50%);
+    background-clip: text;
 }
 
 #timing {
