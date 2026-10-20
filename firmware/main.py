@@ -14,13 +14,6 @@ LOOP_PERIOD = 1.0 / LOOP_HZ
 
 log = logging.getLogger("robot")
 
-class Monitor(SimpleHTTPRequestHandler):
-    def handle(self):
-        log.info("connected: %s", self.client_address[0])
-        super().handle()
-    def log_message(self, format, *args):
-        log.info("client connected via hmi")
-
 class Robot:
     def __init__(self):
         self.running = False
@@ -30,7 +23,7 @@ class Robot:
 
     def setup(self):
         log.info("setup")
-        handler = partial(Monitor, directory=HMI_DIR)
+        handler = partial(SimpleHTTPRequestHandler, directory=HMI_DIR)
         self.httpd = ThreadingHTTPServer(("0.0.0.0", PORT), handler)
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
         log.info("Successfully connected - port: %d", PORT)
