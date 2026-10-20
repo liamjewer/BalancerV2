@@ -6,7 +6,7 @@ import time
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
-HMI_DIR = os.path.abspath("hmi")
+HMI_DIR = os.path.abspath("../hmi")
 PORT = 11227
 
 LOOP_HZ = 100
@@ -19,64 +19,79 @@ class Robot:
         self.running = False
         self.httpd = None
 
-    # ---- lifecycle ----
-
     def setup(self):
         log.info("setup")
+        
+        # set up web server
         handler = partial(SimpleHTTPRequestHandler, directory=HMI_DIR)
         self.httpd = ThreadingHTTPServer(("0.0.0.0", PORT), handler)
+        # wait for new connections indefinitely on separate thread
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
         log.info("Successfully connected - port: %d", PORT)
 
-    def update(self, dt):
+
+    def periodic(self, dt):
         pass
 
+
+    # log a fault and stop the main loop
     def fault(self, reason):
         log.error("fault: %s", reason)
         self.stop()
 
+    # full shutdown procedure
     def shutdown(self):
         log.info("shutdown")
 
+        # stop web server
         if self.httpd:
             self.httpd.shutdown()
             self.httpd.server_close()
 
-    # ---- main loop ----
+    def stop(self):
+        self.running = False
 
     def run(self):
+        #startup sequence
         self.setup()
         self.running = True
+
+        # track timing
         last = time.perf_counter()
         next_tick = last
 
         try:
             while self.running:
+                # calculate time since last tick dt
                 now = time.perf_counter()
                 dt = now - last
                 last = now
 
-                self.update(dt)
+                # pass off to state machine
+                self.periodic(dt)
 
-                # sleep until the next tick; if we overran, skip the sleep and resync
+                # itterate tick
                 next_tick += LOOP_PERIOD
                 delay = next_tick - time.perf_counter()
+
+                # check for overruns
                 if delay > 0:
                     time.sleep(delay)
                 else:
-                    next_tick = time.perf_counter()
+                    # if overrun occured, log and resync timing
+                    log.warning("loop overrun by: %.2fms", delay*1000)
+                    next_tick = time.perf_counter() 
         except Exception:
-            log.exception("loop error: ")
+            log.exception("robot runtime error: ")
         finally:
             self.shutdown()
 
-    def stop(self):
-        self.running = False
-
 
 def main():
+    #initialize log
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s")
+    #initialize robot object
     bv2 = Robot()
 
     # handle stop conditions for safe shutdown
@@ -86,6 +101,6 @@ def main():
     #start robot
     bv2.run()
 
-
+# standard python main function
 if __name__ == "__main__":
     main()
