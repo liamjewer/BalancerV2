@@ -37,15 +37,21 @@ Exact control strategy To Be Determined
 
 ## Getting Started & Setup
 
-To Be Determined
+To install python dependencies:
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 
 ---
 
 ## License & Acknowledgements
 This repository is open-source under the terms of the [MIT License](LICENSE).
 * Generative Artificial Intelligence was used to generate boilerplate code, brainstorm ideas, and troubleshoot technical issues during development. Every line of code in this repository has been human-audited and verified.
+### Javascript Libraries
 * HMI icons provided by [Lucide Icons](https://lucide.dev)
 * Data charting provided by [Chart.js](https://www.chartjs.org)
+### Python Libraries
+* websockets used for communication protocols
 
 <!-- MARKDOWN LINKS -->
 [license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2?style=for-the-badge
