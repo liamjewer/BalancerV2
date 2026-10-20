@@ -61,4 +61,7 @@ time.sleep(5)
 
 hmi.send("console", "sent from B-V2")
 
-time.sleep(5)
+while True:
+    while (msg := hmi.get_next_msg()) is not None:
+        print(msg)
+    time.sleep(0.01)
