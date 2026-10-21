@@ -32,7 +32,7 @@
 <body>
 
 <header>
-  <span id="connection" class=""><i data-lucide="globe-off" id=""connectionIcon></i></span>
+  <span id="connection" class=""><i data-lucide="globe-off" id="connectionIcon"></i></span>
 
   <strong>B-V2 Dashboard</strong>
 
@@ -44,11 +44,8 @@
   <section id="camera" class="panel">
     <h2>Camera</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
-
-    <div class="feed">
-      <!-- Replace with your stream, e.g. <img src="http://ROBOT_IP:8080/stream"> -->
-      <span>No signal</span>
-    </div>
+    
+    <img class = "feed" src="http://b-v2:2609/stream">
   </section>
 
   <section id="status" class="panel">

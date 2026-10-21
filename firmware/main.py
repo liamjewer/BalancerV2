@@ -3,13 +3,18 @@ import os
 import signal
 import threading
 import time
+import subprocess
+
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+
+# custom modules
 from hmi_link import HMILink
 
 HMI_DIR = os.path.abspath("../hmi")
 PORT = 11227
 HMI_PORT = 3683
+CAMERA_PORT = 2609
 
 LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
@@ -22,6 +27,19 @@ class Robot:
         self.httpd = None
         self.hmi = HMILink(HMI_PORT)
         self.current_tick = 0
+
+        self.streamer = subprocess.Popen(
+            [
+                "ustreamer",
+                "--device=/dev/video0",
+                "--format=MJPEG",
+                "--resolution=854x480",
+                "--host=0.0.0.0",
+                f"--port={CAMERA_PORT}",
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
     def setup(self):
         log.info("setup")

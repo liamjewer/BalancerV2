@@ -146,6 +146,7 @@ main {
 
 #camera {
     grid-area: camera;
+    overflow: hidden;
 }
 
 .feed {

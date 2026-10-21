@@ -52,6 +52,8 @@ This repository is open-source under the terms of the [MIT License](LICENSE).
 * Data charting provided by [Chart.js](https://www.chartjs.org)
 ### Python Libraries
 * websockets used for communication protocols
+### Additional 3rd Party Software
+* Camera streaming provided by ustreamer
 
 <!-- MARKDOWN LINKS -->
 [license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2?style=for-the-badge
