@@ -53,15 +53,3 @@ class HMILink:
             return self.incomming.get_nowait()
         else:
             return None
-
-hmi = HMILink()
-hmi.start()
-
-time.sleep(5)
-
-hmi.send("console", "sent from B-V2")
-
-while True:
-    while (msg := hmi.get_next_msg()) is not None:
-        print(msg)
-    time.sleep(0.01)

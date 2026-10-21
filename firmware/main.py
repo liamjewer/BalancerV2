@@ -5,9 +5,11 @@ import threading
 import time
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+from hmi_link import HMILink
 
 HMI_DIR = os.path.abspath("../hmi")
 PORT = 11227
+HMI_PORT = 3683
 
 LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
@@ -18,6 +20,8 @@ class Robot:
     def __init__(self):
         self.running = False
         self.httpd = None
+        self.hmi = HMILink(HMI_PORT)
+        self.current_tick = 0
 
     def setup(self):
         log.info("setup")
@@ -29,9 +33,12 @@ class Robot:
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
         log.info("Successfully connected - port: %d", PORT)
 
+        #set up websocket comm. server
+        self.hmi.start()
+
 
     def periodic(self, dt):
-        pass
+        if self.current_tick%100 == 0 : self.hmi.send("console", str(self.current_tick))
 
 
     # log a fault and stop the main loop
@@ -66,6 +73,7 @@ class Robot:
                 now = time.perf_counter()
                 dt = now - last
                 last = now
+                self.current_tick += 1
 
                 # pass off to state machine
                 self.periodic(dt)
