@@ -4,18 +4,24 @@ import signal
 import threading
 import time
 import subprocess
+import sys
 
+from enum import Enum
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 # custom modules
 from hmi_link import HMILink
 
+# ----- CONSTANTS -----
+
+# communication
 HMI_DIR = os.path.abspath("../hmi")
 PORT = 11227
 HMI_PORT = 3683
 CAMERA_PORT = 2609
 
+# timing
 LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
 
@@ -43,7 +49,7 @@ class Robot:
 
     def setup(self):
         log.info("setup")
-        
+
         # set up web server
         handler = partial(SimpleHTTPRequestHandler, directory=HMI_DIR)
         self.httpd = ThreadingHTTPServer(("0.0.0.0", PORT), handler)
@@ -56,7 +62,26 @@ class Robot:
 
 
     def periodic(self, dt):
-        if self.current_tick%100 == 0 : self.hmi.send("console", str(self.current_tick))
+        # check for hmi messages and handle them
+        current_msg = self.hmi.get_next_msg()
+
+        while current_msg is not None:
+            match current_msg[0]: # type
+                case "ESTOP": # safety #1 priority
+                    sys.exit(0)
+                case "disable":
+                    # set disabled state
+                    log.info("disabling");
+                case "enable":
+                    # set enabled state
+                    log.info("enabling");
+                case "command":
+                    # add command to command queue
+                    log.info("commanding");
+                case _:
+                    log.info(current_msg[1]); #value
+
+            current_msg = self.hmi.get_next_msg()
 
 
     # log a fault and stop the main loop
@@ -72,6 +97,14 @@ class Robot:
         if self.httpd:
             self.httpd.shutdown()
             self.httpd.server_close()
+
+        # kill camera feed
+        if self.streamer:
+            self.streamer.kill()
+            self.streamer.wait()
+
+        #power off the pi
+        subprocess.Popen(["shutdown", "-h", "now"])
 
     def stop(self):
         self.running = False

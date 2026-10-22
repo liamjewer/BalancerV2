@@ -19,8 +19,12 @@ class HMILink:
             async for raw in websocket:
                 # test if the message is valid JSON
                 try:
-                    # adds the link to the message queue
-                    self.incomming.put(json.loads(raw))
+                    # add values and data to the message queue
+                    try:
+                        data = json.loads(raw)
+                        self.incomming.put((data["type"], data["value"]))
+                    except (json.JSONDecodeError, KeyError, TypeError):
+                        pass
                 except json.JSONDecodeError:
                     pass
         finally:
@@ -29,7 +33,7 @@ class HMILink:
 
     def start(self):
         self.loop = asyncio.new_event_loop()
-        threading.Thread(target=self._run, daemon=True).start() # start running self on separate thread
+        threading.Thread(target=self._run, daemon=True).start() # start running self on separate t>
 
     # runs on communication thread
     def _run(self):
