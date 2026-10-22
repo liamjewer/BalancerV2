@@ -1,2 +1,4 @@
 .vscode/c_cpp_properties.json
-firmware/control_loop
+firmware/build/
+firmware/__pycache__/
+venv/

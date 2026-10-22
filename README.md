@@ -37,10 +37,23 @@ Exact control strategy To Be Determined
 
 ## Getting Started & Setup
 
-To install python dependencies:
+**To install python dependencies:**
+```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
+
+**To install C++ dependancies:**
+This project uses **vcpkg** to manage its C++ dependencies
+```bash
+sudo apt install -y libssl-dev zlib1g-dev
+vcpkg install ixwebsocket
+
+mkdir build && cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+cmake --build .
+```
 
 ---
 
@@ -51,9 +64,11 @@ This repository is open-source under the terms of the [MIT License](LICENSE).
 * HMI icons provided by [Lucide Icons](https://lucide.dev)
 * Data charting provided by [Chart.js](https://www.chartjs.org)
 ### Python Libraries
-* websockets used for communication protocols
+* Communication protocols provided by [websockets](https://websockets.readthedocs.io/en/stable/) by Aymeric Augustin and contributors
+### C++ Libraries
+* Communication protocols provided by [IXWebSocket](https://github.com/machinezone/IXWebSocket) by machinezone
 ### Additional 3rd Party Software
-* Camera streaming provided by ustreamer
+* Camera streaming provided by [ustreamer]
 
 <!-- MARKDOWN LINKS -->
 [license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2?style=for-the-badge

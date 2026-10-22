@@ -2,7 +2,7 @@ const sendButton = document.getElementById('send');
 
 sendButton.addEventListener('click', () => {
     consoleMsg = document.getElementById("consoleMsg");
-    send("console", consoleMsg.value);
+    sendCpp("console", consoleMsg.value); //TODO: reconfigure this to sendPy
     clientConsole.insertAdjacentText("beforeend", "Me: " + consoleMsg.value + "\n");
 
     //reset messagebox

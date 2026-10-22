@@ -104,7 +104,7 @@ class Robot:
             self.streamer.wait()
 
         #power off the pi
-        subprocess.Popen(["shutdown", "-h", "now"])
+        #subprocess.Popen(["shutdown", "-h", "now"])
 
     def stop(self):
         self.running = False
