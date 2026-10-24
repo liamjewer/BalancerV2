@@ -355,16 +355,6 @@ main {
     grid-area: input;
 }
 
-#controller{
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    aspect-ratio: 2 / 1;
-    max-width: 100%;
-    pointer-events: none;
-}
-
 #telemetry {
     grid-area: telemetry;
 }

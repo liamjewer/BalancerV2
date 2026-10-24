@@ -25,8 +25,7 @@
   <!-- custom scripts -->
   <script src="scripts/robot_link.js" defer></script>
   <script src="scripts/command_handler.js" defer></script>
-  <script src="scripts/controller_scale.js" defer></script>
-  <script src="scripts/expand.js" defer></script> <!-- requires controller_scale.js -->
+  <script src="scripts/expand.js" defer></script>
   <script src="scripts/send.js" defer></script>
   <script src="scripts/graphing.js" defer></script>
 </head>
@@ -102,9 +101,6 @@
   <section id="input" class="panel">
     <h2>Input</h2>
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
-
-    <!-- Controller visualization via GamePad Viewer -->
-    <iframe id="controller" src="https://app.gpv.gg/?p=1&s=0&sc=0.2" frameborder="0"></iframe>
 
     <!-- values to print in drive section -->
     <div id="inputValues">
