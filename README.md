@@ -49,8 +49,9 @@ pip install -r requirements.txt
 ## License & Acknowledgements
 This repository is open-source under the terms of the [MIT License](LICENSE).
 * Generative Artificial Intelligence was used to generate boilerplate code, brainstorm ideas, and troubleshoot technical issues during development. Every line of code in this repository has been human-audited and verified.
-### Javascript Libraries
+### HTML/CSS/Javascript Libraries
 * HMI icons provided by [Lucide Icons](https://lucide.dev)
+* Controller visualization provided by [e7d/gamepad-viewer](https://github.com/e7d/gamepad-viewer?tab=readme-ov-file)
 * Data charting provided by [Chart.js](https://www.chartjs.org)
 ### Python Libraries
 * websockets used for communication protocols
