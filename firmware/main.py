@@ -105,7 +105,7 @@ class Robot:
                     # add command to command queue
                     log.info("commanding");
                 case "CTRL_OR":
-                    log.info(f"[control loop] control loop overrun by {current_msg[1]} ms");
+                    log.info(f"[control loop] control loop overrun by {value} ms");
                 case _:
                     log.info(value);
 
