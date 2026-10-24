@@ -69,32 +69,47 @@ class Robot:
 
 
     def periodic(self, dt):
-        # check for hmi messages and handle them
-        current_msg = self.hmi.get_next_msg()
         #check for output from control loop
-        msg = control_loop.get_next_msg()
-        while msg is not None:
-            msg_type, value = msg
-            log.info("[control_loop] %s: %s", msg_type, value)
-            msg = control_loop.get_next_msg()
+        current_ctrl_msg = control_loop.get_next_msg()
+        while current_ctrl_msg is not None:
+            msg_type, value = current_ctrl_msg
+           
+            match msg_type:
+                case "CTRL_OR":
+                    log.info(f"[control loop] control loop overrun by {value} ms");
+                case _:
+                    log.info(value);
 
-        while current_msg is not None:
-            match current_msg[0]: # type
+            current_ctrl_msg = control_loop.get_next_msg()
+
+        # check for hmi messages and handle them
+        current_hmi_msg = self.hmi.get_next_msg()
+
+        while current_hmi_msg is not None:
+            msg_type, value = current_hmi_msg;
+            
+            match msg_type:
                 case "ESTOP": # safety #1 priority
+                    control_loop.send("ESTOP", True);
+                    time.sleep(0.5) # wait for cpp to register the command before we kill it
                     sys.exit(0)
                 case "disable":
                     # set disabled state
                     log.info("disabling");
+                    control_loop.send("disable", True); # pass command to the control loop
                 case "enable":
                     # set enabled state
                     log.info("enabling");
+                    control_loop.send("enable", True); # pass command to the control loop
                 case "command":
                     # add command to command queue
                     log.info("commanding");
+                case "CTRL_OR":
+                    log.info(f"[control loop] control loop overrun by {current_msg[1]} ms");
                 case _:
-                    log.info(current_msg[1]); #value
+                    log.info(value);
 
-            current_msg = self.hmi.get_next_msg()
+            current_hmi_msg = self.hmi.get_next_msg()
 
 
     # log a fault and stop the main loop

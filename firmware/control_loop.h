@@ -3,4 +3,5 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 
-void py_print(std::string,nlohmann::json);
+void send_py(std::string,nlohmann::json);
+void periodic();

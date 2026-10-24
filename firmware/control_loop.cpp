@@ -1,4 +1,5 @@
 #include "control_loop.h"
+#include "python_link.h"
 
 #include <iostream>
 #include <chrono>
@@ -17,7 +18,13 @@ constexpr double LOOP_HZ   = 200.0;
 constexpr double PERIOD_MS = 1000.0 / LOOP_HZ;
 constexpr auto   PERIOD    = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double, std::milli>(PERIOD_MS));
 
+PythonLink py;
+bool enabled = false;
+
 int main() {
+    //start python communication
+    py.start();
+
     //force scheduler to "real time" on this core/thread (single core processor)
     sched_param param{};
     param.sched_priority = 80; 
@@ -29,36 +36,46 @@ int main() {
     auto next = last;
     int tick = 0;
 
-    std::string line;
-    if (std::getline(std::cin, line)) {
-        nlohmann::json msg = nlohmann::json::parse(line);
-        std::cerr << "got: " << msg.dump() << std::endl;
-        py_print("10-4", msg["value"]);
-    }
-
-    /*while(true){
+    //runs every tick (behind the scenes)
+    while(true){
         //calculate dt
         auto now = std::chrono::steady_clock::now();
         double dt = std::chrono::duration<double>(now - last).count()*1000; 
         last = now;
 
          if (dt > 1.5 * PERIOD_MS) {
-            std::cerr << "overrun: dt = " << dt << " ms\n";
+            send_py("CTRL_OR", dt - PERIOD_MS);
             next = std::chrono::steady_clock::now();   // resync so it doesn't burst
         }
 
-        if(tick%500 == 0) py_print("message", tick);
+        periodic();
         
 
         tick++;
         next += PERIOD;
         std::this_thread::sleep_until(next);
-    }*/
+    }
 
     return 0;
 }
 
-void py_print(std::string type, nlohmann::json value) {
+//runs every tick (in front of the scenes)
+void periodic(){
+    // check for messages from python
+    while (auto msg = py.get_next_msg()) {
+        auto& [type, value] = *msg;
+        if(type == "ESTOP"){ // safety #1 priotity
+            exit(EXIT_SUCCESS);
+        }else if(type == "disable"){
+            enabled = false;
+        }else if(type == "enable"){
+            enabled = true;
+            send_py("None", "Enabling!");
+        }
+    }
+}
+
+void send_py(std::string type, nlohmann::json value) {
     nlohmann::json msg = {{"type", type}, {"value", value}};
     std::cout << msg.dump() << std::endl;
 }
