@@ -38,9 +38,11 @@ Exact control strategy To Be Determined
 ## Getting Started & Setup
 
 To install python dependencies:
+```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
 
 ---
 
@@ -52,8 +54,10 @@ This repository is open-source under the terms of the [MIT License](LICENSE).
 * Data charting provided by [Chart.js](https://www.chartjs.org)
 ### Python Libraries
 * websockets used for communication protocols
+### C++ Libraries
+* JSON message processing provided by [nlohmann/json](https://github.com/nlohmann/json)
 ### Additional 3rd Party Software
-* Camera streaming provided by ustreamer
+* Camera streaming provided by [ustreamer](https://github.com/pikvm/ustreamer)
 
 <!-- MARKDOWN LINKS -->
 [license-shield]: https://img.shields.io/github/license/liamjewer/BalancerV2?style=for-the-badge

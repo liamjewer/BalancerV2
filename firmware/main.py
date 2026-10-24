@@ -9,6 +9,7 @@ import sys
 from enum import Enum
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+from control_loop_link import ControlLoop
 
 # custom modules
 from hmi_link import HMILink
@@ -26,6 +27,7 @@ LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
 
 log = logging.getLogger("robot")
+control_loop = ControlLoop(["./control_loop"], core=3)
 
 class Robot:
     def __init__(self):
@@ -50,6 +52,9 @@ class Robot:
     def setup(self):
         log.info("setup")
 
+        # start control loop communication
+        control_loop.start()
+
         # set up web server
         handler = partial(SimpleHTTPRequestHandler, directory=HMI_DIR)
         self.httpd = ThreadingHTTPServer(("0.0.0.0", PORT), handler)
@@ -60,10 +65,18 @@ class Robot:
         #set up websocket comm. server
         self.hmi.start()
 
+        control_loop.send("message", "test");
+
 
     def periodic(self, dt):
         # check for hmi messages and handle them
         current_msg = self.hmi.get_next_msg()
+        #check for output from control loop
+        msg = control_loop.get_next_msg()
+        while msg is not None:
+            msg_type, value = msg
+            log.info("[control_loop] %s: %s", msg_type, value)
+            msg = control_loop.get_next_msg()
 
         while current_msg is not None:
             match current_msg[0]: # type
@@ -103,8 +116,12 @@ class Robot:
             self.streamer.kill()
             self.streamer.wait()
 
+
+        # kill control loop
+        control_loop.stop()
+
         #power off the pi
-        subprocess.Popen(["shutdown", "-h", "now"])
+        #subprocess.Popen(["shutdown", "-h", "now"])
 
     def stop(self):
         self.running = False
