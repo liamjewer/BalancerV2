@@ -17,7 +17,8 @@ from hmi_link import HMILink
 # ----- CONSTANTS -----
 
 # communication
-HMI_DIR = os.path.abspath("../hmi")
+HMI_DIR = os.path.abspath("hmi")
+CONTROL_LOOP_BIN = os.path.abspath("./build/control_loop")
 PORT = 11227
 HMI_PORT = 3683
 CAMERA_PORT = 2609
@@ -27,7 +28,7 @@ LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
 
 log = logging.getLogger("robot")
-control_loop = ControlLoop(["./control_loop"], core=3)
+control_loop = ControlLoop([CONTROL_LOOP_BIN], core=3)
 
 class Robot:
     def __init__(self):

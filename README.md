@@ -8,8 +8,12 @@
 
 ## Repository Structure
 ```text
-├── /firmware         # Control logic to run on Raspberry Pi OS
+├── /firmware
+│   ├── /realtime     # C++ control loop (pinned to core running realtime scheduling)
+│   └── /robot        # Python supervisor for general system operations
 ├── /hmi              # Frontend web HMI
+├── /build            # Compiled output (git-ignored)
+├── build.sh          # Build and launch script
 ├── LICENSE
 └── README.md         📌 you are here
 
@@ -37,18 +41,32 @@ Exact control strategy To Be Determined
 
 ## Getting Started & Setup
 
-To install python dependencies:
+## Dependencies
+
+### Python
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+python3 -m venv firmware/venv
+source firmware/venv/bin/activate
+pip install -r firmware/robot/requirements.txt
 ```
+
+### C++
+```bash
+sudo apt update
+sudo apt install build-essential nlohmann-json3-dev
+```
+
+### Build and run
+```bash
+sudo bash build.sh
+```
+Compiles `firmware/realtime/` to `build/control_loop`, then launches the Python supervisor, which starts the control loop on core 3. Root is required for real-time scheduling (`SCHED_FIFO`).
 
 ---
 
 ## License & Acknowledgements
 This repository is open-source under the terms of the [MIT License](LICENSE).
-* Generative Artificial Intelligence was used to generate boilerplate code, brainstorm ideas, and troubleshoot technical issues during development. Every line of code in this repository has been human-audited and verified.
+* Generative Artificial Intelligence was used to generate boilerplate code, brainstorm ideas, and troubleshoot technical issues during development. Every line of AI generated code in this repository has been human-audited and verified.
 ### HTML/CSS/Javascript Libraries
 * HMI icons provided by [Lucide Icons](https://lucide.dev)
 * Controller visualization provided by [e7d/gamepad-viewer](https://github.com/e7d/gamepad-viewer?tab=readme-ov-file)
