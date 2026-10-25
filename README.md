@@ -23,7 +23,7 @@
 
 ### Core Electronic Components
 * **Microcontroller:** Raspberry Pi 4B (8gb RAM)
-* **IMU Sensor:** MPU6050 (6-Axis Accelerometer and Gyroscope)
+* **IMU Sensor:** MPU9250 (6-Axis Accelerometer and Gyroscope)
 * **Motors:** 12V 400 RPM Hobby Gearmotors
 * **Driver:** TB6612FNG
 
