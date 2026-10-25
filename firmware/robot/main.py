@@ -57,6 +57,7 @@ class Robot:
         control_loop.start()
 
         # set up web server
+        SimpleHTTPRequestHandler.log_request = lambda self, *args, **kwargs: None
         handler = partial(SimpleHTTPRequestHandler, directory=HMI_DIR)
         self.httpd = ThreadingHTTPServer(("0.0.0.0", PORT), handler)
         # wait for new connections indefinitely on separate thread
