@@ -27,12 +27,22 @@ CAMERA_PORT = 2609
 LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
 
+# states
+class State(Enum):
+    DISABLED = 0
+    BALANCE_IN_PLACE = 1
+    AUTONOMOUS = 2
+    TELEOPERATED = 3
+
+# ----- Globals -----
 log = logging.getLogger("robot")
-control_loop = ControlLoop([CONTROL_LOOP_BIN], core=3)
+
 
 class Robot:
     def __init__(self):
         self.running = False
+        self.current_state = DISABLED
+        self.control_loop = ControlLoop([CONTROL_LOOP_BIN], core=3)
         self.httpd = None
         self.hmi = HMILink(HMI_PORT)
         self.current_tick = 0
@@ -54,7 +64,7 @@ class Robot:
         log.info("setup")
 
         # start control loop communication
-        control_loop.start()
+        self.control_loop.start()
 
         # set up web server
         SimpleHTTPRequestHandler.log_request = lambda self, *args, **kwargs: None
@@ -67,22 +77,22 @@ class Robot:
         #set up websocket comm. server
         self.hmi.start()
 
-        control_loop.send("message", "test");
+        self.control_loop.send("message", "test")
 
 
     def periodic(self, dt):
-        #check for output from control loop
-        current_ctrl_msg = control_loop.get_next_msg()
+        #check for output from control loop and handle them
+        current_ctrl_msg = self.control_loop.get_next_msg()
         while current_ctrl_msg is not None:
             msg_type, value = current_ctrl_msg
            
             match msg_type:
                 case "CTRL_OR":
-                    log.info(f"[control loop] control loop overrun by {value} ms");
+                    log.info(f"[control loop] control loop overrun by {value} ms")
                 case _:
-                    log.info(value);
+                    log.info(value)
 
-            current_ctrl_msg = control_loop.get_next_msg()
+            current_ctrl_msg = self.control_loop.get_next_msg()
 
         # check for hmi messages and handle them
         current_hmi_msg = self.hmi.get_next_msg()
@@ -92,24 +102,24 @@ class Robot:
             
             match msg_type:
                 case "ESTOP": # safety #1 priority
-                    control_loop.send("ESTOP", True);
+                    self.control_loop.send("ESTOP", True)
                     time.sleep(0.5) # wait for cpp to register the command before we kill it
                     sys.exit(0)
                 case "disable":
                     # set disabled state
                     log.info("disabling");
-                    control_loop.send("disable", True); # pass command to the control loop
+                    self.control_loop.send("disable", True) # pass command to the control loop
                 case "enable":
                     # set enabled state
                     log.info("enabling");
-                    control_loop.send("enable", True); # pass command to the control loop
+                    self.control_loop.send("enable", True) # pass command to the control loop
                 case "command":
                     # add command to command queue
-                    log.info("commanding");
+                    log.info("commanding")
                 case "CTRL_OR":
-                    log.info(f"[control loop] control loop overrun by {value} ms");
+                    log.info(f"[control loop] control loop overrun by {value} ms")
                 case _:
-                    log.info(value);
+                    log.info(value)
 
             current_hmi_msg = self.hmi.get_next_msg()
 
@@ -135,7 +145,7 @@ class Robot:
 
 
         # kill control loop
-        control_loop.stop()
+        self.control_loop.stop()
 
         #power off the pi
         #subprocess.Popen(["shutdown", "-h", "now"])

@@ -33,12 +33,12 @@ class HMILink:
 
     def start(self):
         self.loop = asyncio.new_event_loop()
-        threading.Thread(target=self._run, daemon=True).start() # start running self on separate t>
+        threading.Thread(target=self._run, daemon=True).start() # start running self on separate thread
 
     # runs on communication thread
     def _run(self):
         asyncio.set_event_loop(self.loop)
-        self.loop.run_until_complete(self._serve()) # 
+        self.loop.run_until_complete(self._serve())
 
     async def _serve(self):
         async with serve(self._handler, "0.0.0.0", self.port):
