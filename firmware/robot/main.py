@@ -108,15 +108,15 @@ class Robot:
                     sys.exit(0)
                 case "disable":
                     # set disabled state
-                    log.info("disabling");
-                    self.control_loop.send("disable", True) # pass command to the control loop
+                    log.info("disabling")
+                    current_state = DISABLED
                 case "enable":
                     # set enabled state
-                    log.info("enabling");
-                    self.control_loop.send("enable", True) # pass command to the control loop
+                    log.info("enabling")
+                    current_state = STATIONARY
                 case "command":
-                    # add command to command queue
-                    log.info("commanding")
+                    log.info("handing command")
+                    handle_command(value)
                 case "CTRL_OR":
                     log.info(f"[control loop] control loop overrun by {value} ms")
                 case _:
@@ -128,44 +128,48 @@ class Robot:
         match self.current_state:
             case DISABLED:
                 if(previous_state == current_state) disabled_init() # first time so call state init
-                disabled_periodic();
+                disabled_periodic()
             case STATIONARY:
                 if(previous_state == current_state) stationary_init() # first time so call state init
-                stationary_periodic();
+                stationary_periodic()
             case AUTONOMOUS:
                 if(previous_state == current_state) autonomous_init() # first time so call state init
-                disabled_periodic();
+                disabled_periodic()
             case TELEOPERATED:
                 if(previous_state == current_state) teleoperated_init() # first time so call state init
-                disabled_periodic();
+                disabled_periodic()
             case _:
                 self.current_state = DISABLED # default back to disabled
 
     previous_state = current_state # reset previous state
 
     def disabled_init():
-        pass
+        self.control_loop.send("disable", True) # pass command to the control loop
 
     def disabled_periodic():
         pass
 
     def stationary_init():
-        pass
+        self.control_loop.send("enable", True) # pass enable signal to the control loop
 
     def stationary_periodic():
         pass
 
     def autonomous_init():
-        pass
+        self.control_loop.send("enable", True) # pass enable signal to the control loop
 
     def autonomous_periodic():
         pass
 
     def teleoperated_itit():
-        pass
+        self.control_loop.send("enable", True) # pass enable signal to the control loop
 
     def teleoperated_periodic():
         pass
+
+    def handle_command(command):
+        pass
+    
     
     # log a fault and stop the main loop
     def fault(self, reason):
