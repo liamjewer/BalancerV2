@@ -60,7 +60,7 @@
       </div>
 
       <div id="state">
-        <div><b>State:</b> <br><span>--</span></div>
+        <div><b>State:</b> <br><span id="stateReadout">DISABLED</span></div>
         <div><b>Fault:</b> <br><span>None</span></div>
       </div>
 
@@ -205,9 +205,9 @@
     <div class="expand" onclick="expand(this)"><i data-lucide="expand"></i></div>
 
     <div class="deck">
-      <button class="key" data-action="unassigned"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
-      <button class="key" data-action="unassigned"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
-      <button class="key" data-action="unassigned"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
+      <button class="key" data-action="state_stationary"><i data-lucide="anchor"></i><span>Stationary</span></button>
+      <button class="key" data-action="state_auto"><i data-lucide="waypoints"></i><span>Autonomous</span></button>
+      <button class="key" data-action="state_teleop"><i data-lucide="gamepad-2"></i><span>Teleoperated</span></button>
 
       <button class="key" data-action="calibrate"><i data-lucide="crosshair"></i><span>Calibrate</span></button>
       <button class="key" data-action="zero-imu"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
@@ -215,7 +215,7 @@
 
       <button class="key" data-action="lights"><i data-lucide="lightbulb"></i><span>Lights</span></button>
       <button class="key" data-action="snapshot"><i data-lucide="circle-dashed"></i><span>Unassigned</span></button>
-      <button class="key" data-action="shutdown"><i data-lucide="power"></i><span>Shutdown</span></button>
+      <button class="key" data-action="shutdown" id="EstopButton"><i data-lucide="power"></i><span>Shutdown</span></button>
   </div>
   </section>
 

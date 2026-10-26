@@ -41,7 +41,7 @@ log = logging.getLogger("robot")
 class Robot:
     def __init__(self):
         self.running = False
-        self.current_state = DISABLED
+        self.current_state = State.DISABLED
         self.previous_state = None
         self.control_loop = ControlLoop([CONTROL_LOOP_BIN], core=3)
         self.httpd = None
@@ -68,7 +68,6 @@ class Robot:
         self.control_loop.start()
 
         # set up web server
-        SimpleHTTPRequestHandler.log_request = lambda self, *args, **kwargs: None
         handler = partial(SimpleHTTPRequestHandler, directory=HMI_DIR)
         self.httpd = ThreadingHTTPServer(("0.0.0.0", PORT), handler)
         # wait for new connections indefinitely on separate thread
@@ -109,14 +108,14 @@ class Robot:
                 case "disable":
                     # set disabled state
                     log.info("disabling")
-                    current_state = DISABLED
+                    self.current_state = State.DISABLED
                 case "enable":
                     # set enabled state
                     log.info("enabling")
-                    current_state = STATIONARY
+                    self.current_state = State.STATIONARY
                 case "command":
-                    log.info("handing command")
-                    handle_command(value)
+                    log.info(f"handling command: {value}")
+                    self.handle(value)
                 case "CTRL_OR":
                     log.info(f"[control loop] control loop overrun by {value} ms")
                 case _:
@@ -126,49 +125,69 @@ class Robot:
 
         # handle states
         match self.current_state:
-            case DISABLED:
-                if(previous_state == current_state) disabled_init() # first time so call state init
-                disabled_periodic()
-            case STATIONARY:
-                if(previous_state == current_state) stationary_init() # first time so call state init
-                stationary_periodic()
-            case AUTONOMOUS:
-                if(previous_state == current_state) autonomous_init() # first time so call state init
-                disabled_periodic()
-            case TELEOPERATED:
-                if(previous_state == current_state) teleoperated_init() # first time so call state init
-                disabled_periodic()
+            case State.DISABLED:
+                if(self.previous_state != self.current_state):
+                    self.disabled_init() # first time so call state init
+
+                self.disabled_periodic()
+            case State.STATIONARY:
+                if(self.previous_state != self.current_state):
+                     self.stationary_init() # first time so call state init
+
+                self.stationary_periodic()
+            case State.AUTONOMOUS:
+                if(self.previous_state != self.current_state):
+                     self.autonomous_init() # first time so call state init
+
+                self.disabled_periodic()
+            case State.TELEOPERATED:
+                if(self.previous_state != self.current_state):
+                     self.teleoperated_init() # first time so call state init
+
+                self.disabled_periodic()
             case _:
-                self.current_state = DISABLED # default back to disabled
+                self.current_state = State.DISABLED # default back to disabled
 
-    previous_state = current_state # reset previous state
+        self.previous_state = self.current_state # reset previous state
 
-    def disabled_init():
-        self.control_loop.send("disable", True) # pass command to the control loop
+    def disabled_init(self):
+        self.control_loop.send("disable", True) # pass state to the control loop
+        self.hmi.send("state", "DISABLED") # and hmi
 
-    def disabled_periodic():
+    def disabled_periodic(self):
         pass
 
-    def stationary_init():
+    def stationary_init(self):
         self.control_loop.send("enable", True) # pass enable signal to the control loop
+        self.hmi.send("state", "STATIONARY") # pass state to hmi
 
-    def stationary_periodic():
+    def stationary_periodic(self):
         pass
 
-    def autonomous_init():
+    def autonomous_init(self):
         self.control_loop.send("enable", True) # pass enable signal to the control loop
+        self.hmi.send("state", "AUTONOMOUS")
 
     def autonomous_periodic():
         pass
 
-    def teleoperated_itit():
+    def teleoperated_init(self):
         self.control_loop.send("enable", True) # pass enable signal to the control loop
+        self.hmi.send("state", "TELEOPERATED")
 
-    def teleoperated_periodic():
+    def teleoperated_periodic(self):
         pass
 
-    def handle_command(command):
-        pass
+    def handle(self, command):
+        match command:
+            case "state_stationary":
+                self.current_state = State.STATIONARY
+            case "state_auto":
+                self.current_state = State.AUTONOMOUS
+            case "state_teleop":
+                self.current_state = State.TELEOPERATED
+            case _:
+                pass
     
     
     # log a fault and stop the main loop

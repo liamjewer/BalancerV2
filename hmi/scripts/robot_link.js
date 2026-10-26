@@ -9,6 +9,7 @@ connectionIndicator = document.getElementById("connection");
 ws.onopen = () => {
   console.log("connected to " + PORT);
 
+  send("disable", "true")
   displayConnected();
 };
 
@@ -60,6 +61,8 @@ ws.onerror = (err) => {
       // keeps the most current message on the bottom
       clientConsole.scrollTop = clientConsole.scrollHeight;
       break;
+    case "state":
+      document.getElementById("stateReadout").textContent = msg.value
     default:
       console.log("received:", msg);
       break;
@@ -79,6 +82,7 @@ ws.onerror = (err) => {
 };
 
 function send(type, value) {
+  console.log("sending...");
   if (ws.readyState !== WebSocket.OPEN) return;
   ws.send(JSON.stringify({ type: type, value: value }));
 }
