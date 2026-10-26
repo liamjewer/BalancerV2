@@ -30,7 +30,7 @@ LOOP_PERIOD = 1.0 / LOOP_HZ
 # states
 class State(Enum):
     DISABLED = 0
-    BALANCE_IN_PLACE = 1
+    STATIONARY = 1
     AUTONOMOUS = 2
     TELEOPERATED = 3
 
@@ -42,6 +42,7 @@ class Robot:
     def __init__(self):
         self.running = False
         self.current_state = DISABLED
+        self.previous_state = None
         self.control_loop = ControlLoop([CONTROL_LOOP_BIN], core=3)
         self.httpd = None
         self.hmi = HMILink(HMI_PORT)
@@ -123,7 +124,49 @@ class Robot:
 
             current_hmi_msg = self.hmi.get_next_msg()
 
+        # handle states
+        match self.current_state:
+            case DISABLED:
+                if(previous_state == current_state) disabled_init() # first time so call state init
+                disabled_periodic();
+            case STATIONARY:
+                if(previous_state == current_state) stationary_init() # first time so call state init
+                stationary_periodic();
+            case AUTONOMOUS:
+                if(previous_state == current_state) autonomous_init() # first time so call state init
+                disabled_periodic();
+            case TELEOPERATED:
+                if(previous_state == current_state) teleoperated_init() # first time so call state init
+                disabled_periodic();
+            case _:
+                self.current_state = DISABLED # default back to disabled
 
+    previous_state = current_state # reset previous state
+
+    def disabled_init():
+        pass
+
+    def disabled_periodic():
+        pass
+
+    def stationary_init():
+        pass
+
+    def stationary_periodic():
+        pass
+
+    def autonomous_init():
+        pass
+
+    def autonomous_periodic():
+        pass
+
+    def teleoperated_itit():
+        pass
+
+    def teleoperated_periodic():
+        pass
+    
     # log a fault and stop the main loop
     def fault(self, reason):
         log.error("fault: %s", reason)
