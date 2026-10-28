@@ -5,6 +5,7 @@ import threading
 import time
 import subprocess
 import sys
+import RPi.GPIO as GPIO
 
 from enum import Enum
 from functools import partial
@@ -27,6 +28,13 @@ CAMERA_PORT = 2609
 LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
 
+# pin numbers
+LED_PIN = 11
+
+# pin setup
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(LED_PIN, GPIO.OUT, initial=GPIO.HIGH)
+
 # states
 class State(Enum):
     DISABLED = 0
@@ -37,7 +45,6 @@ class State(Enum):
 # ----- Globals -----
 log = logging.getLogger("robot")
 
-
 class Robot:
     def __init__(self):
         self.running = False
@@ -47,6 +54,8 @@ class Robot:
         self.httpd = None
         self.hmi = HMILink(HMI_PORT)
         self.current_tick = 0
+        self.led_state = False
+
 
         self.streamer = subprocess.Popen(
             [
@@ -186,6 +195,13 @@ class Robot:
                 self.current_state = State.AUTONOMOUS
             case "state_teleop":
                 self.current_state = State.TELEOPERATED
+            case "lights":
+                if self.led_state == True:
+                    GPIO.output(LED_PIN, GPIO.LOW)
+                    self.led_state = False
+                else:
+                    GPIO.output(LED_PIN, GPIO.HIGH)
+                    self.led_state = True
             case _:
                 pass
     
@@ -198,6 +214,9 @@ class Robot:
     # full shutdown procedure
     def shutdown(self):
         log.info("shutdown")
+
+        # shut down GPIO connections
+        GPIO.cleanup()
 
         # stop web server
         if self.httpd:

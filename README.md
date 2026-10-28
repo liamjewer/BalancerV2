@@ -72,7 +72,8 @@ This repository is open-source under the terms of the [MIT License](LICENSE).
 * Controller visualization provided by [e7d/gamepad-viewer](https://github.com/e7d/gamepad-viewer?tab=readme-ov-file)
 * Data charting provided by [Chart.js](https://www.chartjs.org)
 ### Python Libraries
-* websockets used for communication protocols
+* Communication handling provided by [websockets](https://pypi.org/project/websockets/)
+* GPIO functionality handling by [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)
 ### C++ Libraries
 * JSON message processing provided by [nlohmann/json](https://github.com/nlohmann/json)
 ### Additional 3rd Party Software
