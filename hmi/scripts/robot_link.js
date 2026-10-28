@@ -82,7 +82,6 @@ ws.onerror = (err) => {
 };
 
 function send(type, value) {
-  console.log("sending...");
   if (ws.readyState !== WebSocket.OPEN) return;
   ws.send(JSON.stringify({ type: type, value: value }));
 }

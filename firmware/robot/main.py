@@ -10,10 +10,11 @@ import RPi.GPIO as GPIO
 from enum import Enum
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
-from control_loop_link import ControlLoop
 
 # custom modules
 from hmi_link import HMILink
+from control_loop_link import ControlLoop
+from gamepad import Gamepad
 
 # ----- CONSTANTS -----
 
@@ -55,6 +56,8 @@ class Robot:
         self.hmi = HMILink(HMI_PORT)
         self.current_tick = 0
         self.led_state = False
+        self.gamepad = Gamepad()
+        self.gamepad_connected = False
 
 
         self.streamer = subprocess.Popen(
@@ -122,6 +125,12 @@ class Robot:
                     # set enabled state
                     log.info("enabling")
                     self.current_state = State.STATIONARY
+                case "gamepad":
+                    if value is not None:
+                        self.gamepad_connected = True
+                        self.gamepad.parse(value)
+                    else:
+                        self.gamepad_connected = False
                 case "command":
                     log.info(f"handling command: {value}")
                     self.handle(value)
@@ -148,12 +157,12 @@ class Robot:
                 if(self.previous_state != self.current_state):
                      self.autonomous_init() # first time so call state init
 
-                self.disabled_periodic()
+                self.autonomous_periodic()
             case State.TELEOPERATED:
                 if(self.previous_state != self.current_state):
                      self.teleoperated_init() # first time so call state init
 
-                self.disabled_periodic()
+                self.teleoperated_periodic()
             case _:
                 self.current_state = State.DISABLED # default back to disabled
 
@@ -185,7 +194,7 @@ class Robot:
         self.hmi.send("state", "TELEOPERATED")
 
     def teleoperated_periodic(self):
-        pass
+        log.info(f"Axis L X: {self.gamepad.leftJoystickX}");
 
     def handle(self, command):
         match command:
