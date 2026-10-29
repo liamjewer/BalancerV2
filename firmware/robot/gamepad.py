@@ -22,6 +22,8 @@ class Gamepad:
     rightBumper: bool = False
     viewButton: bool = False
     startButton: bool = False
+    leftJoystickPress: bool = False
+    rightJoystickPress: bool = False
     xboxButton: bool = False
     padUp: bool = False
     padDown: bool = False

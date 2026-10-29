@@ -9,6 +9,7 @@ const BUTTONS = {
   0: "aButton", 1: "bButton", 2: "xButton", 3: "yButton",
   4: "leftBumper", 5: "rightBumper",
   8: "viewButton", 9: "startButton",
+  10: "leftJoystickPress", 11: "rightJoystickPress",
   12: "padUp", 13: "padDown", 14: "padLeft", 15: "padRight",
   16: "xboxButton"
 };
