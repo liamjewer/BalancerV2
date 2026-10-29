@@ -56,7 +56,7 @@ class Robot:
         self.hmi = HMILink(HMI_PORT)
         self.current_tick = 0
         self.led_state = False
-        self.gamepad = Gamepad()
+        self.gamepad = Gamepad(self)
         self.gamepad_connected = False
 
 
@@ -197,23 +197,24 @@ class Robot:
         log.info(f"Axis L X: {self.gamepad.leftJoystickX}");
 
     def handle(self, command):
-        match command:
-            case "state_stationary":
-                self.current_state = State.STATIONARY
-            case "state_auto":
-                self.current_state = State.AUTONOMOUS
-            case "state_teleop":
-                self.current_state = State.TELEOPERATED
-            case "lights":
-                if self.led_state == True:
-                    GPIO.output(LED_PIN, GPIO.LOW)
-                    self.led_state = False
-                else:
-                    GPIO.output(LED_PIN, GPIO.HIGH)
-                    self.led_state = True
-            case _:
-                pass
-    
+        if self.current_state != State.DISABLED:
+            match command:
+                case "state_stationary":
+                    self.current_state = State.STATIONARY
+                case "state_auto":
+                    self.current_state = State.AUTONOMOUS
+                case "state_teleop":
+                    self.current_state = State.TELEOPERATED
+                case "lights":
+                    if self.led_state == True:
+                        GPIO.output(LED_PIN, GPIO.HIGH)
+                        self.led_state = False
+                    else:
+                        GPIO.output(LED_PIN, GPIO.LOW)
+                        self.led_state = True
+                case _:
+                    pass
+        
     
     # log a fault and stop the main loop
     def fault(self, reason):
