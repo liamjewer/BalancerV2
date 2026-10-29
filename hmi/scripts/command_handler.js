@@ -42,6 +42,17 @@ function readGamepadJSON() {
 
   const out = {};
   AXES.forEach((name, i) => { out[name] = pad.axes[i]; });
+
+  // update axes values on display
+  document.getElementById("leftJoystickXValue").textContent = pad.axes[0].toFixed(2);
+  document.getElementById("leftJoystickYValue").textContent = pad.axes[1].toFixed(2);
+  document.getElementById("rightJoystickXValue").textContent = pad.axes[2].toFixed(2);
+  document.getElementById("rightJoystickYValue").textContent = pad.axes[3].toFixed(2);
+
+  document.getElementById("leftTriggerValue").textContent = pad.buttons[6].value.toFixed(2);
+  document.getElementById("rightTriggerValue").textContent = pad.buttons[7].value.toFixed(2);
+
+
   for (const [i, name] of Object.entries(BUTTONS)) out[name] = pad.buttons[i].pressed;
   for (const [i, name] of Object.entries(TRIGGERS)) out[name] = pad.buttons[i].value;
 
