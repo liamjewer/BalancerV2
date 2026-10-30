@@ -58,6 +58,9 @@ class Robot:
         self.led_state = False
         self.gamepad = Gamepad(self)
         self.gamepad_connected = False
+        self.cpp_pong_time = time.perf_counter_ns()
+        self.cpp_ping_time = time.perf_counter_ns()
+        self.pipe_latency = time.perf_counter_ns()
 
 
         self.streamer = subprocess.Popen(
@@ -95,12 +98,22 @@ class Robot:
     def periodic(self, dt):
         #check for output from control loop and handle them
         current_ctrl_msg = self.control_loop.get_next_msg()
+
+        if self.current_tick%LOOP_HZ*2 == 0: # every ~2s
+            self.cpp_ping_time = time.perf_counter_ns()
+            self.control_loop.send("pyPing", True)
+
         while current_ctrl_msg is not None:
-            msg_type, value = current_ctrl_msg
+            msg_type, value, t_arrival = current_ctrl_msg
            
             match msg_type:
                 case "CTRL_OR":
                     log.info(f"[control loop] control loop overrun by {value} ms")
+                case "loop_hz":
+                    self.hmi.send("loop_hz", value)
+                case "cppPong":
+                    self.pipe_latency = (t_arrival - self.cpp_ping_time)/1000  # µs
+                    self.hmi.send("cpp_lat", self.pipe_latency)
                 case _:
                     log.info(value)
 
@@ -110,8 +123,8 @@ class Robot:
         current_hmi_msg = self.hmi.get_next_msg()
 
         while current_hmi_msg is not None:
-            msg_type, value = current_hmi_msg;
-            
+            msg_type, value = current_hmi_msg
+
             match msg_type:
                 case "ESTOP": # safety #1 priority
                     self.control_loop.send("ESTOP", True)
@@ -125,6 +138,8 @@ class Robot:
                     # set enabled state
                     log.info("enabling")
                     self.current_state = State.STATIONARY
+                case "hmiPing":
+                    self.hmi.send("pyPong", True)
                 case "gamepad":
                     if value is not None:
                         self.gamepad_connected = True
@@ -137,7 +152,7 @@ class Robot:
                 case "CTRL_OR":
                     log.info(f"[control loop] control loop overrun by {value} ms")
                 case _:
-                    log.info(value)
+                    log.info(f"no match: {value}")
 
             current_hmi_msg = self.hmi.get_next_msg()
 
@@ -194,7 +209,7 @@ class Robot:
         self.hmi.send("state", "TELEOPERATED")
 
     def teleoperated_periodic(self):
-        log.info(f"Axis L X: {self.gamepad.leftJoystickX}");
+        log.info(f"Axis L X: {self.gamepad.leftJoystickX}")
 
     def handle(self, command):
         if self.current_state != State.DISABLED:

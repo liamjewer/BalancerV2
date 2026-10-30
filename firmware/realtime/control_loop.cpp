@@ -14,7 +14,7 @@ float Kp = 0.0;
 float Ki = 0.0;
 float Kd = 0.0;
 
-constexpr double LOOP_HZ   = 200.0;
+constexpr int LOOP_HZ   = 200;
 constexpr double PERIOD_MS = 1000.0 / LOOP_HZ;
 constexpr auto   PERIOD    = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double, std::milli>(PERIOD_MS));
 
@@ -36,21 +36,28 @@ int main() {
     auto next = last;
     int tick = 0;
 
-    //runs every tick (behind the scenes)
+    // runs every tick (behind the scenes)
     while(true){
         //calculate dt
         auto now = std::chrono::steady_clock::now();
         double dt = std::chrono::duration<double>(now - last).count()*1000; 
         last = now;
 
-         if (dt > 1.5 * PERIOD_MS) {
-            send_py("CTRL_OR", dt - PERIOD_MS);
-            next = std::chrono::steady_clock::now();   // resync so it doesn't burst
+        // check for overruns
+        if (dt > 1.5 * PERIOD_MS) {
+            py.send("CTRL_OR", dt - PERIOD_MS);
+            next = std::chrono::steady_clock::now();   // resync
         }
 
-        periodic();
+        // send the frequency to the hmi through python
+        if(tick%(LOOP_HZ*2) == 0){ // every 2s
+            py.send("loop_hz", 1000.0/dt);
+        }
         
 
+        periodic();
+
+        
         tick++;
         next += PERIOD;
         std::this_thread::sleep_until(next);
@@ -70,12 +77,7 @@ void periodic(){
             enabled = false;
         }else if(type == "enable"){
             enabled = true;
-            send_py("None", "Enabling!");
+            py.send("None", "Enabling!");
         }
     }
-}
-
-void send_py(std::string type, nlohmann::json value) {
-    nlohmann::json msg = {{"type", type}, {"value", value}};
-    std::cout << msg.dump() << std::endl;
 }

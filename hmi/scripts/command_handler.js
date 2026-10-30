@@ -60,6 +60,14 @@ function readGamepadJSON() {
   return JSON.stringify(out);
 }
 
+tick = 0;
+
 const timerId = setInterval(() => {
+  tick++;
+
   send("gamepad", readGamepadJSON());
+  if(tick%(PUSH_FREQ*2) == 0){ // ping every 2s
+    robotPingTime = performance.now();
+    send("hmiPing", true);
+  }
 }, (1/PUSH_FREQ)*1000); // convert HZ to ms

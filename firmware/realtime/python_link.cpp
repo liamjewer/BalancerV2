@@ -11,6 +11,13 @@ void PythonLink::read() {
     while (std::getline(std::cin, line)) { // wait on this thread
         try {
             auto msg = nlohmann::json::parse(line);
+            std::string type = msg.at("type").get<std::string>();
+
+            if (type == "pyPing") {
+                send("cppPong", true);
+                continue;
+            }
+
             std::lock_guard<std::mutex> lock(in_mutex);
             incoming.push({msg.at("type").get<std::string>(), msg.at("value")});
         } catch (...) {} // ignore bad JSON or missing keys

@@ -184,8 +184,8 @@ main {
     display: grid;
     grid-template-columns: repeat(4, 25%);
     grid-template-rows: repeat(2, 50%);
-    grid-template-areas: "enabled state udp packetLoss"
-                          "enabled timing tcp control";
+    grid-template-areas: "enabled hmi pipe control"
+                          "enabled state timing timing";
 }
 
 #enabled {
@@ -241,6 +241,7 @@ main {
 }
 
 #timing {
+    display: flex;
     grid-area: timing;
     padding: 15px;
 }
@@ -252,7 +253,7 @@ main {
 
 #state div, #timing div {
     font-size: 8pt;
-    padding: 5% 0;
+    padding: 5%;
 }
 
 #state span, #timing span {
@@ -260,19 +261,15 @@ main {
     padding: 5% 0;
 }
 
-#udp {
-    grid-area: udp;
+#hmiLat{
+    grid-area: hmi;
 }
 
-#packetLoss {
-    grid-area: packetLoss;
+#pipeLat{
+    grid-area: pipe;
 }
 
-#tcp{
-    grid-area: tcp;
-}
-
-#controlFrequency{
+#controlFreq{
     grid-area: control;
 }
 

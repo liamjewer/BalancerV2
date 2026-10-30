@@ -23,7 +23,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- custom scripts -->
-  <script src="scripts/robot_link.js" defer></script>
+  <script src="scripts/robot_link.js" defer></script> <!-- must be first -->
   <script src="scripts/command_handler.js" defer></script>
   <script src="scripts/expand.js" defer></script>
   <script src="scripts/send.js" defer></script>
@@ -64,31 +64,23 @@
         <div><b>Fault:</b> <br><span>None</span></div>
       </div>
 
-      <div class="gauge" id="udp" style="--p: 0.7;">
+      <div class="gauge" id="hmiLat" style="--p: 0.0;">
         <div class="ticks"></div>
         <div class="needle"></div>
         <div class="hub"></div>
-        <span class="reading">59.4 Hz</span>
-        <h2>Controller Latency (UDP)</h2>
+        <span class="reading">∞ ms</span>
+        <h2>HMI Latency</h2>
       </div>
 
-      <div class="gauge" id="packetLoss" style="--p: 0.3;">
+      <div class="gauge" id="pipeLat" style="--p: 0.00;">
         <div class="ticks"></div>
         <div class="needle"></div>
         <div class="hub"></div>
-        <span class="reading">1 %</span>
-        <h2>Packet Loss</h2>
-      </div>
-
-      <div class="gauge" id="tcp" style="--p: 0.25;">
-        <div class="ticks"></div>
-        <div class="needle"></div>
-        <div class="hub"></div>
-        <span class="reading">59.4 Hz</span>
-        <h2>Data Latency (TCP)</h2>
+        <span class="reading">∞ μs</span>
+        <h2>Py ⇔ Cpp Latency</h2>
       </div>
       
-      <div class="gauge" id="controlFrequency" style="--p: 0.1;">
+      <div class="gauge" id="controlFreq" style="--p: 0.1;">
         <div class="ticks"></div>
         <div class="needle"></div>
         <div class="hub"></div>

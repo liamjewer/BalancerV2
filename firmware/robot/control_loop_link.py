@@ -2,6 +2,7 @@ import json
 import queue
 import subprocess
 import threading
+import time
 
 class ControlLoop:
     def __init__(self, command, core=3):
@@ -24,9 +25,10 @@ class ControlLoop:
 
     def _read(self):
         for line in self.proc.stdout:   # blocks until a full line arrives
+            t_arrival = time.perf_counter_ns()
             try:
                 data = json.loads(line)
-                self.incoming.put((data["type"], data["value"]))
+                self.incoming.put((data["type"], data["value"], t_arrival))
             except (json.JSONDecodeError, KeyError, TypeError):
                 pass
 
