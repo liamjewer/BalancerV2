@@ -102,6 +102,7 @@ class Robot:
         if self.current_tick%LOOP_HZ*2 == 0: # every ~2s
             self.cpp_ping_time = time.perf_counter_ns()
             self.control_loop.send("pyPing", True)
+            self.hmi.send("robo_hz", 1.0/dt)
 
         while current_ctrl_msg is not None:
             msg_type, value, t_arrival = current_ctrl_msg
@@ -109,8 +110,8 @@ class Robot:
             match msg_type:
                 case "CTRL_OR":
                     log.info(f"[control loop] control loop overrun by {value} ms")
-                case "loop_hz":
-                    self.hmi.send("loop_hz", value)
+                case "ctrl_hz":
+                    self.hmi.send("ctrl_hz", value)
                 case "cppPong":
                     self.pipe_latency = (t_arrival - self.cpp_ping_time)/1000  # µs
                     self.hmi.send("cpp_lat", self.pipe_latency)
@@ -201,7 +202,7 @@ class Robot:
         self.control_loop.send("enable", True) # pass enable signal to the control loop
         self.hmi.send("state", "AUTONOMOUS")
 
-    def autonomous_periodic():
+    def autonomous_periodic(self):
         pass
 
     def teleoperated_init(self):

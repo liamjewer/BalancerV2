@@ -2,6 +2,8 @@ const PORT = 3683;
 
 const ws = new WebSocket(`ws://${location.hostname}:${PORT}`);
 
+const stateReadout = document.getElementById("stateReadout");
+
 clientConsole = document.getElementById("console");
 connectionIndicator = document.getElementById("connection");
 
@@ -21,11 +23,13 @@ ws.onmessage = (event) => {
   const msg = JSON.parse(event.data);
 
   switch (msg.type) {
+    case "state":
+      stateReadout.textContent = msg.value;
+      break;
     case "console":
       clientConsole.insertAdjacentText("beforeend", "B-V2: " + msg.value + "\n");
       // keeps the most current message on the bottom
       clientConsole.scrollTop = clientConsole.scrollHeight;
-
       break;
     case "pyPong":
       robotPongTime = performance.now();
@@ -34,9 +38,14 @@ ws.onmessage = (event) => {
       hmiLat.style = "--p: " + (1.0-(robotLatency/100)) + ";";
       hmiLat.querySelector('.reading').textContent = robotLatency.toFixed(2) + " ms";
       break;
-    case "loop_hz":
+    case "ctrl_hz":
       controlFrequency = document.getElementById("controlFreq");
       controlFrequency.style = "--p: " + (msg.value/200) + ";";
+      controlFrequency.querySelector('.reading').textContent = msg.value.toFixed(2) + " Hz";
+      break;
+    case "robo_hz":
+      controlFrequency = document.getElementById("robotFreq");
+      controlFrequency.style = "--p: " + (msg.value/100) + ";";
       controlFrequency.querySelector('.reading').textContent = msg.value.toFixed(2) + " Hz";
       break;
     case "cpp_lat":

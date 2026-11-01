@@ -51,7 +51,7 @@ int main() {
 
         // send the frequency to the hmi through python
         if(tick%(LOOP_HZ*2) == 0){ // every 2s
-            py.send("loop_hz", 1000.0/dt);
+            py.send("ctrl_hz", 1000.0/dt);
         }
         
 

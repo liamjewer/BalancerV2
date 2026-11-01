@@ -184,8 +184,8 @@ main {
     display: grid;
     grid-template-columns: repeat(4, 25%);
     grid-template-rows: repeat(2, 50%);
-    grid-template-areas: "enabled hmi pipe control"
-                          "enabled state timing timing";
+    grid-template-areas: "enabled state hmi pipe"
+                          "enabled timing robo control";
 }
 
 #enabled {
@@ -271,6 +271,10 @@ main {
 
 #controlFreq{
     grid-area: control;
+}
+
+#roboFreq{
+    grid-area: robot;
 }
 
 .gauge {

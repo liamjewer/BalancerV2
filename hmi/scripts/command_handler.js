@@ -1,7 +1,7 @@
 // HTML elements
 const EStopButton = document.getElementById("EstopButton"); // safety #1>
 const enabledToggle = document.getElementById("enabled");
-const commandPad = document.getElementsByClassName("key");
+const commandPad = document.querySelectorAll(".key");
 
 // controller IDs
 const AXES = ["leftJoystickX", "leftJoystickY", "rightJoystickX", "rightJoystickY"];
@@ -25,15 +25,18 @@ EStopButton.addEventListener("click", () => { // safety #1 priority
 enabledToggle.addEventListener('change', (event) => {
   if (event.target.checked) {
     send("enable", true) //send enable signal
+    stateReadout.textContent = "STATIONARY";
   } else {
     send("disable", true)
+    stateReadout.textContent = "DISABLED";
   }
 });
 
-[...commandPad].forEach(key => {
+
+commandPad.forEach(key => {
   key.addEventListener("click", () => {
-    // only send state update if robot is not disabled
-    if(document.getElementById("stateReadout").textContent != "DISABLED") send("command", key.dataset.action);
+    // only send command if robot is not disabled
+    if(stateReadout.textContent != "DISABLED") send("command", key.dataset.action);
   });
 });
 
