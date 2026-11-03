@@ -15,6 +15,7 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from hmi_link import HMILink
 from control_loop_link import ControlLoop
 from gamepad import Gamepad
+from battery import Ina226
 
 # ----- CONSTANTS -----
 
@@ -61,6 +62,7 @@ class Robot:
         self.cpp_pong_time = time.perf_counter_ns()
         self.cpp_ping_time = time.perf_counter_ns()
         self.pipe_latency = time.perf_counter_ns()
+        self.battery = Ina226()
 
 
         self.streamer = subprocess.Popen(
@@ -103,6 +105,7 @@ class Robot:
             self.cpp_ping_time = time.perf_counter_ns()
             self.control_loop.send("pyPing", True)
             self.hmi.send("robo_hz", 1.0/dt)
+            self.hmi.send("battery", self.battery.get_voltage())
 
         while current_ctrl_msg is not None:
             msg_type, value, t_arrival = current_ctrl_msg
