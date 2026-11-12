@@ -1,5 +1,6 @@
 #include "control_loop.h"
 #include "python_link.h"
+#include "wheel.h"
 
 #include <iostream>
 #include <chrono>
@@ -19,6 +20,34 @@ constexpr double PERIOD_MS = 1000.0 / LOOP_HZ;
 constexpr auto   PERIOD    = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double, std::milli>(PERIOD_MS));
 
 PythonLink py;
+
+// configure wheels
+
+inline WheelConfig left_wheel_config() {
+    WheelConfig c;
+    c.i2c_dev = "/dev/i2c-1"; // primary bus
+    c.pwm_channel = 1; // GPIO13 (PWMA)
+    c.in1_pin = 23; // AIN1
+    c.in2_pin = 24; // AIN2
+    c.wheel_radius_m = 0.0335f;
+    return c;
+}
+
+inline WheelConfig right_wheel_config() {
+    WheelConfig c;
+    c.i2c_dev = "/dev/i2c-0"; // secondary bus
+    c.pwm_channel = 0; // GPIO12 (PWMB)
+    c.in1_pin = 16; // BIN1
+    c.in2_pin = 20; // BIN2
+    c.wheel_radius_m = 0.0335f;
+    c.invert_motor = true; // mirror right wheel
+    c.invert_encoder = true;
+    return c;
+}
+
+Wheel l_wheel(left_wheel_config());
+Wheel r_wheel(right_wheel_config());
+
 bool enabled = false;
 
 int main() {
@@ -35,6 +64,8 @@ int main() {
     auto last = std::chrono::steady_clock::now();
     auto next = last;
     int tick = 0;
+
+    init();
 
     // runs every tick (behind the scenes)
     while(true){
@@ -55,7 +86,7 @@ int main() {
         }
         
 
-        periodic();
+        periodic(dt, tick);
 
         
         tick++;
@@ -66,8 +97,20 @@ int main() {
     return 0;
 }
 
-//runs every tick (in front of the scenes)
-void periodic(){
+// set up (in front of the scenes)
+void init(){
+    bool l_ok = l_wheel.init();
+    bool r_ok = r_wheel.init();
+    if (!l_ok || !r_ok) { //handle errors
+        py.send("info", "wheel init failed");
+    }
+    //start at 0
+    l_wheel.set_duty(0.0f);
+    r_wheel.set_duty(0.0f);
+}
+
+// runs every tick (in front of the scenes)
+void periodic(float dt, int current_tick){
     // check for messages from python
     while (auto msg = py.get_next_msg()) {
         auto& [type, value] = *msg;
@@ -75,9 +118,29 @@ void periodic(){
             exit(EXIT_SUCCESS);
         }else if(type == "disable"){
             enabled = false;
+            l_wheel.set_duty(0.0f);
+            r_wheel.set_duty(0.0f);
         }else if(type == "enable"){
             enabled = true;
             py.send("None", "Enabling!");
         }
     }
+
+    // call motor periodics
+    l_wheel.periodic(dt);
+    r_wheel.periodic(dt);
+
+    if(enabled){
+        l_wheel.set_duty(0.3f);
+        r_wheel.set_duty(0.3f);
+    }
+
+    if(current_tick%200 == 0){ //once per second
+        py.send("info", l_wheel.get_speed());
+        py.send("info", l_wheel.get_position());
+
+        py.send("info", r_wheel.get_speed());
+        py.send("info", r_wheel.get_position());
+    }
+
 }
