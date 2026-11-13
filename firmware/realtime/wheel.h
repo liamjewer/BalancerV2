@@ -28,7 +28,7 @@ public:
     float pwm_deadband = 0.0f; // static friction
 
     bool init();                   
-    void periodic(float dt);
+    void periodic(float* dt);
 
     void set_duty(float duty);
     float get_speed() const; // measured, filtered, m/s
@@ -58,5 +58,5 @@ private:
 
     bool encoder_init();
     bool driver_init();
-    void encoder_update(float dt);
+    void encoder_update(float* dt);
 };

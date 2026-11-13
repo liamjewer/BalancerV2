@@ -31,11 +31,13 @@ LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
 
 # pin numbers
-LED_PIN = 11
+R_LED_PIN = 11
+L_LED_PIN = 13
 
 # pin setup
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(LED_PIN, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(R_LED_PIN, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(L_LED_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
 # states
 class State(Enum):
@@ -226,10 +228,12 @@ class Robot:
                     self.current_state = State.TELEOPERATED
                 case "lights":
                     if self.led_state == True:
-                        GPIO.output(LED_PIN, GPIO.HIGH)
+                        GPIO.output(R_LED_PIN, GPIO.HIGH)
+                        GPIO.output(L_LED_PIN, GPIO.HIGH)
                         self.led_state = False
                     else:
-                        GPIO.output(LED_PIN, GPIO.LOW)
+                        GPIO.output(R_LED_PIN, GPIO.LOW)
+                        GPIO.output(L_LED_PIN, GPIO.LOW)
                         self.led_state = True
                 case _:
                     pass

@@ -105,10 +105,9 @@ void Wheel::set_duty(float duty) {
     sysfs_write(pwm_path + "/duty_cycle", static_cast<long>(magnitude * PWM_PERIOD_NS));
 }
 
-void Wheel::encoder_update(float dt) {
+void Wheel::encoder_update(float* dt) {
     int raw;
     if (!read_raw_angle(i2c_fd, raw)){
-        std::cerr << "encoder read failed\n";
         return; // failure handling
     }
 
@@ -125,7 +124,7 @@ void Wheel::encoder_update(float dt) {
     position = static_cast<float>(ticks * meters_per_tick);
 
     // slide the window: drop the oldest sample, add the newest
-    elapsed += dt;
+    elapsed += *dt;
     std::copy(history.begin() + 1, history.end(), history.begin());
     history.back() = {ticks, elapsed};
 
@@ -135,8 +134,10 @@ void Wheel::encoder_update(float dt) {
     speed = static_cast<float>((history.back().ticks - history.front().ticks)* meters_per_tick / span);
 }
 
-void Wheel::periodic(float dt) {
-    encoder_update(dt/1000); 
+void Wheel::periodic(float* dt) {
+    // convert dt to seconds
+    *dt = *dt / 1000;
+    encoder_update(dt); 
 }
 
 float Wheel::get_speed() const {

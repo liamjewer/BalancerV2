@@ -127,8 +127,8 @@ void periodic(float dt, int current_tick){
     }
 
     // call motor periodics
-    l_wheel.periodic(dt);
-    r_wheel.periodic(dt);
+    l_wheel.periodic(&dt);
+    r_wheel.periodic(&dt);
 
     if(enabled){
         l_wheel.set_duty(0.3f);
