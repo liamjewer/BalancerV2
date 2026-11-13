@@ -1,6 +1,7 @@
 #include "control_loop.h"
 #include "python_link.h"
 #include "wheel.h"
+#include "imu.h"
 
 #include <iostream>
 #include <chrono>
@@ -18,6 +19,8 @@ float Kd = 0.0;
 constexpr int LOOP_HZ   = 200;
 constexpr double PERIOD_MS = 1000.0 / LOOP_HZ;
 constexpr auto   PERIOD    = std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double, std::milli>(PERIOD_MS));
+
+Imu imu;
 
 PythonLink py;
 
@@ -99,6 +102,8 @@ int main() {
 
 // set up (in front of the scenes)
 void init(){
+    imu.init();
+
     bool l_ok = l_wheel.init();
     bool r_ok = r_wheel.init();
     if (!l_ok || !r_ok) { //handle errors
@@ -126,6 +131,9 @@ void periodic(float dt, int current_tick){
         }
     }
 
+    //update pitch
+    imu.update(&dt);
+
     // call motor periodics
     l_wheel.periodic(&dt);
     r_wheel.periodic(&dt);
@@ -136,11 +144,7 @@ void periodic(float dt, int current_tick){
     }
 
     if(current_tick%200 == 0){ //once per second
-        py.send("info", l_wheel.get_speed());
-        py.send("info", l_wheel.get_position());
-
-        py.send("info", r_wheel.get_speed());
-        py.send("info", r_wheel.get_position());
+        py.send("pitch", imu.get_pitch());
     }
 
 }
