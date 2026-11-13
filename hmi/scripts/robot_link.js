@@ -10,6 +10,8 @@ connectionIndicator = document.getElementById("connection");
 tiltStage = document.getElementById("tiltStage");
 pitchReadout = document.getElementById("pitchReadout");
 
+battery = document.getElementById("battery");
+
 robotPingTime = 0.0;
 robotPongTime = 0.0;
 robotLatency = 0.0;
@@ -57,9 +59,15 @@ ws.onmessage = (event) => {
       pipeLat.querySelector('.reading').textContent = msg.value.toFixed(2) + " μs";
       break;
     case "tilt":
-      console.log(msg.value);
       tiltStage.style = "--tilt: " + msg.value*-1 + "deg;";
       pitchReadout.textContent = msg.value.toFixed(2);
+      break;
+    case "battery":
+      const rawPercent = ((msg.value - 11.4) / (12.6 - 11.4)) * 100;
+      const percent = Math.min(100, Math.max(0, rawPercent));
+
+      battery.textContent = msg.value.toFixed(2) + " V";
+      battery.style.backgroundImage = `linear-gradient(90deg, var(--blue) ${percent}%, var(--bg) ${percent}%)`;
       break;
     default:
       console.log("received:", msg);
