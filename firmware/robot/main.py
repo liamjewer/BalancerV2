@@ -120,8 +120,10 @@ class Robot:
                 case "cppPong":
                     self.pipe_latency = (t_arrival - self.cpp_ping_time)/1000  # µs
                     self.hmi.send("cpp_lat", self.pipe_latency)
+                case "tilt":
+                    self.hmi.send("tilt", value)
                 case _:
-                    log.info(value)
+                    log.info(f"{msg_type}: {value}")
 
             current_ctrl_msg = self.control_loop.get_next_msg()
 

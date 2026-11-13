@@ -10,9 +10,7 @@
     --text: #eef2ff;
     --grey: #595959;
     --gap: 12px;
-
-    /*functional variables*/
-    --tilt: 20deg;
+    
     --tiltStatusColour: var(--green);
     --pivot-x: 53%;
     --pivot-y: 88%;
@@ -393,6 +391,7 @@ main {
 }
 
 #tiltStage {
+    --tilt: 20deg;
     position: absolute;
     bottom: 0;
     left: 50%;

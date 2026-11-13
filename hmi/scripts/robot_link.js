@@ -7,6 +7,9 @@ const stateReadout = document.getElementById("stateReadout");
 clientConsole = document.getElementById("console");
 connectionIndicator = document.getElementById("connection");
 
+tiltStage = document.getElementById("tiltStage");
+pitchReadout = document.getElementById("pitchReadout");
+
 robotPingTime = 0.0;
 robotPongTime = 0.0;
 robotLatency = 0.0;
@@ -52,6 +55,11 @@ ws.onmessage = (event) => {
       pipeLat = document.getElementById("pipeLat");
       pipeLat.style = "--p: " + (1.0-(msg.value/1000)) + ";";
       pipeLat.querySelector('.reading').textContent = msg.value.toFixed(2) + " μs";
+      break;
+    case "tilt":
+      console.log(msg.value);
+      tiltStage.style = "--tilt: " + msg.value*-1 + "deg;";
+      pitchReadout.textContent = msg.value.toFixed(2);
       break;
     default:
       console.log("received:", msg);
