@@ -30,11 +30,17 @@ public:
     bool init();                   
     void periodic(float* dt);
 
+    void enable();
+    void disable();
+
     void set_duty(float duty);
     float get_speed() const; // measured, filtered, m/s
     float get_position() const; // accumulated distance, m
 
 private:
+    static constexpr unsigned STBY_PIN = 22;
+    static std::unique_ptr<gpiod::line_request> stby_request;
+
     WheelConfig cfg;
 
     float position = 0.0f;

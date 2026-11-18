@@ -127,6 +127,7 @@ void periodic(float dt, int current_tick){
             r_wheel.set_duty(0.0f);
         }else if(type == "enable"){
             enabled = true;
+            l_wheel.enable(); //enables both (STBY high)
             py.send("None", "Enabling!");
         }
     }

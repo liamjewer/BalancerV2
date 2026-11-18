@@ -31,6 +31,8 @@ bool read_raw_angle(int fd, int& raw) {     // 0..4095, false on I2C failure
 
 }
 
+std::unique_ptr<gpiod::line_request> Wheel::stby_request;
+
 Wheel::Wheel(const WheelConfig& config) : cfg(config) {}
 
 Wheel::~Wheel() {
@@ -66,6 +68,7 @@ bool Wheel::driver_init() {
         gpiod::chip chip("/dev/gpiochip0");
         gpiod::line::offsets pins{static_cast<unsigned>(cfg.in1_pin),
                                   static_cast<unsigned>(cfg.in2_pin)};
+        
         dir_request = std::make_unique<gpiod::line_request>(
             chip.prepare_request()
                 .set_consumer("Wheel")
@@ -73,6 +76,17 @@ bool Wheel::driver_init() {
                     .set_direction(gpiod::line::direction::OUTPUT)
                     .set_output_value(Val::INACTIVE))
                 .do_request());
+
+        if (!stby_request) {
+            stby_request = std::make_unique<gpiod::line_request>(
+                chip.prepare_request()
+                    .set_consumer("stby")
+                    .add_line_settings(STBY_PIN, gpiod::line_settings()
+                        .set_direction(gpiod::line::direction::OUTPUT)
+                        .set_output_value(Val::INACTIVE))     // starts low
+                    .do_request());
+        }
+
     } catch (const std::exception& e) {
         std::cerr << "cannot claim direction pins: " << e.what() << "\n";
         return false;
@@ -132,6 +146,15 @@ void Wheel::encoder_update(float* dt) {
     const double span = history.back().time - history.front().time;
     if (span <= 0.0) return;
     speed = static_cast<float>((history.back().ticks - history.front().ticks)* meters_per_tick / span);
+}
+
+void Wheel::enable()  {
+    if (stby_request)
+        stby_request->set_value(STBY_PIN, Val::ACTIVE);
+}
+void Wheel::disable() {
+    if (stby_request)
+        stby_request->set_value(STBY_PIN, Val::INACTIVE);
 }
 
 void Wheel::periodic(float* dt) {
