@@ -16,6 +16,7 @@ from hmi_link import HMILink
 from control_loop_link import ControlLoop
 from gamepad import Gamepad
 from battery import Ina226
+from servo import Servo
 
 # ----- CONSTANTS -----
 
@@ -30,12 +31,17 @@ CAMERA_PORT = 2609
 LOOP_HZ = 100
 LOOP_PERIOD = 1.0 / LOOP_HZ
 
-# pin numbers
-R_LED_PIN = 11
-L_LED_PIN = 13
+# pin numbers (BCM)
+R_LED_PIN = 17
+L_LED_PIN = 27
+
+R_EAR_PIN = 6
+L_EAR_PIN = 26
 
 # pin setup
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
+
+# LEDs
 GPIO.setup(R_LED_PIN, GPIO.OUT, initial=GPIO.HIGH)
 GPIO.setup(L_LED_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
@@ -65,7 +71,8 @@ class Robot:
         self.cpp_ping_time = time.perf_counter_ns()
         self.pipe_latency = time.perf_counter_ns()
         self.battery = Ina226()
-
+        self.right_ear = Servo(R_EAR_PIN, 0.7, 2.35)
+        self.left_ear = Servo(L_EAR_PIN, 0.5, 2.45)
 
         self.streamer = subprocess.Popen(
             [
@@ -122,6 +129,10 @@ class Robot:
                     self.hmi.send("cpp_lat", self.pipe_latency)
                 case "tilt":
                     self.hmi.send("tilt", value)
+                case "rspeed":
+                    self.hmi.send("rspeed", value)
+                case "lspeed":
+                    self.hmi.send("lspeed", value)
                 case _:
                     log.info(f"{msg_type}: {value}")
 
@@ -195,12 +206,18 @@ class Robot:
         self.control_loop.send("disable", True) # pass state to the control loop
         self.hmi.send("state", "DISABLED") # and hmi
 
+        self.right_ear.coast()
+        self.left_ear.coast()
+
     def disabled_periodic(self):
         pass
 
     def stationary_init(self):
         self.control_loop.send("enable", True) # pass enable signal to the control loop
         self.hmi.send("state", "STATIONARY") # pass state to hmi
+
+        self.right_ear.go_to(90)
+        self.left_ear.go_to(90)
 
     def stationary_periodic(self):
         pass
@@ -251,6 +268,9 @@ class Robot:
         log.info("shutdown")
 
         # shut down GPIO connections
+        self.right_ear.close()
+        self.left_ear.close()
+        
         GPIO.cleanup()
 
         # stop web server

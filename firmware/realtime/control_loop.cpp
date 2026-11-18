@@ -140,12 +140,14 @@ void periodic(float dt, int current_tick){
     r_wheel.periodic(&dt);
 
     if(enabled){
-        l_wheel.set_duty(0.3f);
-        r_wheel.set_duty(0.3f);
+        // l_wheel.set_duty(0.3f);
+        // r_wheel.set_duty(0.3f);
     }
 
     if(current_tick%20 == 0){ //10 Hz
         py.send("tilt", imu.get_pitch());
+        py.send("rspeed", r_wheel.get_speed());
+        py.send("lspeed", l_wheel.get_speed());
     }
 
 }

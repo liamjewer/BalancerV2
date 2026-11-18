@@ -9,6 +9,8 @@ connectionIndicator = document.getElementById("connection");
 
 tiltStage = document.getElementById("tiltStage");
 pitchReadout = document.getElementById("pitchReadout");
+lSpeedReadout = document.getElementById("lSpeedReadout");
+rSpeedReadout = document.getElementById("rSpeedReadout");
 
 battery = document.getElementById("battery");
 
@@ -61,6 +63,14 @@ ws.onmessage = (event) => {
     case "tilt":
       tiltStage.style = "--tilt: " + msg.value*-1 + "deg;";
       pitchReadout.textContent = msg.value.toFixed(2);
+      break;
+    case "rspeed":
+      const rspeed = msg.value*100; //convert to cm/s
+      rSpeedReadout.textContent = rspeed.toFixed(2);
+      break;
+    case "lspeed":
+      const lspeed = msg.value*100; //convert to cm/s
+      lSpeedReadout.textContent = lspeed.toFixed(2);
       break;
     case "battery":
       const rawPercent = ((msg.value - 11.4) / (12.6 - 11.4)) * 100;

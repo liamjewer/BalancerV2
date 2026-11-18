@@ -137,8 +137,8 @@ void Wheel::encoder_update(float* dt) {
     const double meters_per_tick = 2.0 * M_PI * cfg.wheel_radius_m / TICKS_PER_REV;
     position = static_cast<float>(ticks * meters_per_tick);
 
-    // slide the window: drop the oldest sample, add the newest
-    elapsed += *dt;
+    // slide the window (FIFO)
+    elapsed += *dt/1000;
     std::copy(history.begin() + 1, history.end(), history.begin());
     history.back() = {ticks, elapsed};
 
@@ -152,14 +152,13 @@ void Wheel::enable()  {
     if (stby_request)
         stby_request->set_value(STBY_PIN, Val::ACTIVE);
 }
+
 void Wheel::disable() {
     if (stby_request)
         stby_request->set_value(STBY_PIN, Val::INACTIVE);
 }
 
 void Wheel::periodic(float* dt) {
-    // convert dt to seconds
-    *dt = *dt / 1000;
     encoder_update(dt); 
 }
 
