@@ -36,7 +36,7 @@
 
   <strong>B-V2 Dashboard</strong>
 
-  <span id="battery">12.4 V</span>
+  <span id="battery">--.-- V</span>
 </header>
 
 <main>
@@ -55,8 +55,8 @@
       <input type="checkbox" id="enabled" onclick="">
 
       <div id="timing">
-        <div><b>Uptime:</b> <br><span>--</span></div>
-        <div><b>Runtime:</b> <br><span>--</span></div>
+        <div><b>Uptime:</b> <br><span id="uptime">--</span> s</div>
+        <div><b>Runtime:</b> <br><span id="runtime">--</span> s</div>
       </div>
 
       <div id="state">
@@ -157,19 +157,19 @@
             <td>Left Motor</td>
             <td>pwm deadband</td>
             <td><input type="number" step="0.01" value="0"></td>
-            <td><button class="row-sync" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
+            <td><button class="row-sync" data-constant="left_pwm_deadband" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
           </tr>
           <tr>
             <td>Right Motor</td>
             <td>pwm deadband</td>
             <td><input type="number" step="0.01" value="0"></td>
-            <td><button class="row-sync" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
+            <td><button class="row-sync" data-constant="right_pwm_deadband" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
           </tr>
           <tr>
             <td>IMU</td>
-            <td>filter α</td>
+            <td>filter (α)</td>
             <td><input type="number" step="0.01" value="0"></td>
-            <td><button class="row-sync" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
+            <td><button class="row-sync" data-constant="filter_alpha" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
           </tr>
         </tbody>
       </table>
@@ -202,16 +202,13 @@
       <!-- chart via Chart.js -->
       <div id="graphContainer"><canvas id="dataChart"></canvas></div>
 
-      <button id="start">Start</button>
-      <span id="recordingTime">--:--</span>
-      <button id="start">Save CSV</button>
-
       <div id="selections">
-        <label><input type="checkbox" value="lMotorSpeed" checked="true" onchange="">lMotorSpeed</label>
-        <label><input type="checkbox" value="rMotorSpeed" onchange="">rMotorSpeed</label>
-        <label><input type="checkbox" value="rMotorSetpoint" onchange="">rMotorSetpoint</label>
-        <label><input type="checkbox" value="lMotorSetpoint" onchange="">lMotorSetpoint</label>
+        <label><input type="checkbox" value="lMotorSpeed" checked="true" onchange="">lMotorSpeed (cm/s)</label>
+        <label><input type="checkbox" value="rMotorSpeed" onchange="">rMotorSpeed (cm/s)</label>
+        <label><input type="checkbox" value="tilt" onchange="">tilt</label>
       </div>
+
+      <button id="start">Save CSV</button>
     </div>
 
     <span id="console"></span>

@@ -11,6 +11,8 @@ tiltStage = document.getElementById("tiltStage");
 pitchReadout = document.getElementById("pitchReadout");
 lSpeedReadout = document.getElementById("lSpeedReadout");
 rSpeedReadout = document.getElementById("rSpeedReadout");
+uptimeReadout = document.getElementById("uptime");
+runtimeReadout = document.getElementById("runtime");
 
 battery = document.getElementById("battery");
 
@@ -60,17 +62,18 @@ ws.onmessage = (event) => {
       pipeLat.style = "--p: " + (1.0-(msg.value/1000)) + ";";
       pipeLat.querySelector('.reading').textContent = msg.value.toFixed(2) + " μs";
       break;
-    case "tilt":
-      tiltStage.style = "--tilt: " + msg.value*-1 + "deg;";
-      pitchReadout.textContent = msg.value.toFixed(2);
+    case "data": {
+      const { t, tilt, rspeed, lspeed } = msg.value;
+
+      tiltStage.style = "--tilt: " + tilt * -1 + "deg;";
+      pitchReadout.textContent = tilt.toFixed(2);
+      rSpeedReadout.textContent = (rspeed * 100).toFixed(2); // m/s to cm/s
+      lSpeedReadout.textContent = (lspeed * 100).toFixed(2); // m/s to cm/s
+      runtimeReadout.textContent = t.toFixed(2);
       break;
-    case "rspeed":
-      const rspeed = msg.value*100; //convert to cm/s
-      rSpeedReadout.textContent = rspeed.toFixed(2);
-      break;
-    case "lspeed":
-      const lspeed = msg.value*100; //convert to cm/s
-      lSpeedReadout.textContent = lspeed.toFixed(2);
+    }
+    case "uptime":
+      uptimeReadout.textContent = value.toFixed(2);
       break;
     case "battery":
       const rawPercent = ((msg.value - 11.4) / (12.6 - 11.4)) * 100;

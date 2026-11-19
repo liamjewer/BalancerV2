@@ -24,6 +24,8 @@ Imu imu;
 
 PythonLink py;
 
+const auto program_start = std::chrono::steady_clock::now();
+
 // configure wheels
 
 inline WheelConfig left_wheel_config() {
@@ -144,10 +146,18 @@ void periodic(float dt, int current_tick){
         // r_wheel.set_duty(0.3f);
     }
 
-    if(current_tick%20 == 0){ //10 Hz
-        py.send("tilt", imu.get_pitch());
-        py.send("rspeed", r_wheel.get_speed());
-        py.send("lspeed", l_wheel.get_speed());
+    if (current_tick % 4 == 0) { // 50 Hz
+        py.send("data", {
+            {"t", uptime_s()},
+            {"tilt", imu.get_pitch()},
+            {"rspeed", r_wheel.get_speed()},
+            {"lspeed", l_wheel.get_speed()}
+        });
     }
 
+}
+
+double uptime_s() {
+    using namespace std::chrono;
+    return duration<double>(steady_clock::now() - program_start).count();
 }

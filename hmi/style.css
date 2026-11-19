@@ -507,7 +507,7 @@ main {
 }
 
 /* value cells look like plain text until focused */
-.tuning-table input {
+input[type="number"] {
   width: 100%;
   padding: 2px 4px;
   background: transparent;
@@ -516,8 +516,8 @@ main {
   font: inherit;
 }
 
-.tuning-table input:hover,
-.tuning-table input:focus {
+input[type="number"] input:hover,
+input[type="number"] input:focus {
   background: rgba(0, 0, 0, 0.25);
   border-color: var(--blue);
   outline: none;
@@ -615,10 +615,10 @@ main {
     padding: 10px 15px;
 }
 
-#recordingTime{
+#recordingTime {
     display: inline-block;
-    padding: 0 10px;
-    width: 100px
+    width: 80px;
+    text-align: right;
 }
 
 #selections {

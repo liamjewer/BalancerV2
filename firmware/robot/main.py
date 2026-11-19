@@ -127,12 +127,9 @@ class Robot:
                 case "cppPong":
                     self.pipe_latency = (t_arrival - self.cpp_ping_time)/1000  # µs
                     self.hmi.send("cpp_lat", self.pipe_latency)
-                case "tilt":
-                    self.hmi.send("tilt", value)
-                case "rspeed":
-                    self.hmi.send("rspeed", value)
-                case "lspeed":
-                    self.hmi.send("lspeed", value)
+                case "data":
+                    self.hmi.send("uptime", time.clock_gettime(time.CLOCK_BOOTTIME)) # send pi uptime with it
+                    self.hmi.send("data", value)
                 case _:
                     log.info(f"{msg_type}: {value}")
 
@@ -168,8 +165,8 @@ class Robot:
                 case "command":
                     log.info(f"handling command: {value}")
                     self.handle(value)
-                case "CTRL_OR":
-                    log.info(f"[control loop] control loop overrun by {value} ms")
+                case "tuning":
+                    self.control_loop.send("tuning", value) # pass to cpp
                 case _:
                     log.info(f"no match: {value}")
 
