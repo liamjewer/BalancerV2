@@ -87,7 +87,7 @@ main {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
     grid-template-areas: "camera camera telemetry input" 
-                          "camera camera constants quick" 
+                          "camera camera tuning quick" 
                           "status status log log";
 }
 
@@ -449,17 +449,30 @@ main {
     border-radius: 3pt;
 }
 
-#constants {
-    grid-area: constants;
+#tuning {
+    grid-area: tuning;
 }
 
-#syncIcon{
+.row-sync {
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+}
+
+.row-sync svg {
   height: 12pt;
+  width: auto;
   transition: 1s ease-in-out;
 }
 
-.spin{
+.row-sync svg.spin {
   transform: rotate(720deg);
+}
+
+.tuning-table td:last-child,
+.tuning-table th:last-child {
+  width: 1%;
+  white-space: nowrap;
 }
 
 .table-wrap {
@@ -468,13 +481,13 @@ main {
   overflow: auto;
 }
 
-.constants-table {
+.tuning-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 9pt;
 }
 
-.constants-table th {
+.tuning-table th {
   position: sticky; /* freeze panes */
   top: 0;
   background: var(--blue-dark);
@@ -484,17 +497,17 @@ main {
   border-bottom: 1px solid var(--blue);
 }
 
-.constants-table td {
+.tuning-table td {
   padding: 2px 8px;
   border-bottom: 1px solid rgba(65, 105, 225, 0.3);
 }
 
-.constants-table tbody tr:hover {
+.tuning-table tbody tr:hover {
   background: rgba(65, 105, 225, 0.15);
 }
 
 /* value cells look like plain text until focused */
-.constants-table input {
+.tuning-table input {
   width: 100%;
   padding: 2px 4px;
   background: transparent;
@@ -503,8 +516,8 @@ main {
   font: inherit;
 }
 
-.constants-table input:hover,
-.constants-table input:focus {
+.tuning-table input:hover,
+.tuning-table input:focus {
   background: rgba(0, 0, 0, 0.25);
   border-color: var(--blue);
   outline: none;
@@ -681,7 +694,7 @@ input[type="range"] {
     main {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
-        grid-template-areas: "camera camera" "status input" "telemetry constants" "quick log";
+        grid-template-areas: "camera camera" "status input" "telemetry tuning" "quick log";
     }
     #camera {
         min-height: 260px;
