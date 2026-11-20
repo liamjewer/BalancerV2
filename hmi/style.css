@@ -92,6 +92,7 @@ main {
 }
 
 .panel {
+    isolation: isolate;
     background: var(--blue-dark);
     border: 1px solid var(--blue);
     border-radius: 6px;

@@ -147,7 +147,7 @@ void periodic(float dt, int current_tick){
     }
 
     if (current_tick % 4 == 0) { // 50 Hz
-        py.send("data", {
+        py.send("telemetry", {
             {"t", uptime_s()},
             {"tilt", imu.get_pitch()},
             {"rspeed", r_wheel.get_speed()},
