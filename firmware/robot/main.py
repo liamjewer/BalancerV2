@@ -55,6 +55,17 @@ class State(Enum):
 # ----- Globals -----
 log = logging.getLogger("robot")
 
+class HMILogHandler(logging.Handler):
+    def __init__(self, hmi):
+        super().__init__()
+        self.hmi = hmi
+
+    def emit(self, record):
+        try:
+            self.hmi.send("console", self.format(record))
+        except Exception:
+            self.handleError(record)
+
 class Robot:
     def __init__(self):
         self.running = False
@@ -103,7 +114,9 @@ class Robot:
         #set up websocket comm. server
         self.hmi.start()
 
-        self.control_loop.send("message", "test")
+        handler = HMILogHandler(self.hmi)
+        handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
+        log.addHandler(handler)
 
 
     def periodic(self, dt):
