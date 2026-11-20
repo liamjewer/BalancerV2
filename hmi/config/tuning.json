@@ -1,0 +1,9 @@
+{
+    "imu_filter_alpha": 0.9800000190734863,
+    "k_d_balance": 0.0,
+    "k_i_balance": 0.0,
+    "k_p_balance": 1.2000000476837158,
+    "left_pwm_deadband": 0.029999999329447746,
+    "right_pwm_deadband": 0.019999999552965164,
+    "sp_balance": 0.0
+}

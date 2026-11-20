@@ -116,6 +116,8 @@ int main() {
 void init(){
     imu.init();
 
+    load_tuning();
+
     bool l_ok = l_wheel.init();
     bool r_ok = r_wheel.init();
     if (!l_ok || !r_ok) { //handle errors
@@ -162,6 +164,8 @@ void periodic(float dt, int current_tick){
             }else if (key == "sp_balance"){
                 sp_balance = val;
             }
+            
+            save_tuning();
         }
     }
 
@@ -215,4 +219,49 @@ float calculate_balance_PID(float dt){
 double uptime_s() {
     using namespace std::chrono;
     return duration<double>(steady_clock::now() - program_start).count();
+}
+
+bool save_tuning(const std::string& filepath) {
+    nlohmann::json j = {
+        {"left_pwm_deadband",  l_wheel.pwm_deadband},
+        {"right_pwm_deadband", r_wheel.pwm_deadband},
+        {"imu_filter_alpha",          imu.alpha},
+        {"k_p_balance",        k_p_balance},
+        {"k_i_balance",        k_i_balance},
+        {"k_d_balance",        k_d_balance},
+        {"sp_balance",         sp_balance}
+    };
+
+    std::ofstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open " << filepath << " for writing.\n";
+        return false;
+    }
+
+    file << j.dump(4) << std::endl;
+    return true;
+}
+
+bool load_tuning(const std::string& filepath) {
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        return false;
+    }
+
+    try {
+        nlohmann::json j = nlohmann::json::parse(file);
+
+        l_wheel.pwm_deadband = j.value("left_pwm_deadband",  l_wheel.pwm_deadband);
+        r_wheel.pwm_deadband = j.value("right_pwm_deadband", r_wheel.pwm_deadband);
+        imu.alpha            = j.value("imu_filter_alpha",   imu.alpha);
+        k_p_balance          = j.value("k_p_balance",        k_p_balance);
+        k_i_balance          = j.value("k_i_balance",        k_i_balance);
+        k_d_balance          = j.value("k_d_balance",        k_d_balance);
+        sp_balance           = j.value("sp_balance",         sp_balance);
+
+        return true;
+    } catch (const nlohmann::json::parse_error& e) {
+        std::cerr << "JSON parse error: " << e.what() << '\n';
+        return false;
+    }
 }
