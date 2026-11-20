@@ -4,6 +4,7 @@
 #include "imu.h"
 
 #include <iostream>
+#include <fstream>
 #include <chrono>
 #include <thread>
 #include <sched.h>
@@ -150,7 +151,7 @@ void periodic(float dt, int current_tick){
                 l_wheel.pwm_deadband = val;
             }else if (key == "right_pwm_deadband"){
                 r_wheel.pwm_deadband = val;
-            }else if (key == "imu_alpha"){
+            }else if (key == "imu_filter_alpha"){
                 imu.alpha = val;
             }else if (key == "k_p_balance"){
                 k_p_balance = val;
