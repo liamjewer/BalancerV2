@@ -12,9 +12,14 @@
 #include <nlohmann/json.hpp>
 
 // constants
-float Kp = 0.0;
-float Ki = 0.0;
-float Kd = 0.0;
+float k_p_balance = 0.1f; //tunable
+float k_i_balance = 0.0f; //tunable
+float k_d_balance = 0.0f; //tunable
+
+float sp_balance = 0.0f; //tunable
+//history
+float integral_balance = 0.0f;
+float prev_err_balance = 0.0f;
 
 constexpr int LOOP_HZ   = 200;
 constexpr double PERIOD_MS = 1000.0 / LOOP_HZ;
@@ -45,7 +50,7 @@ inline WheelConfig right_wheel_config() {
     c.in1_pin = 16; // BIN1
     c.in2_pin = 20; // BIN2
     c.wheel_radius_m = 0.0335f;
-    c.invert_motor = true; // mirror right wheel
+    c.invert_motor = false; // mirror right wheel
     c.invert_encoder = true;
     return c;
 }
@@ -142,8 +147,8 @@ void periodic(float dt, int current_tick){
     r_wheel.periodic(&dt);
 
     if(enabled){
-        // l_wheel.set_duty(0.3f);
-        // r_wheel.set_duty(0.3f);
+        l_wheel.set_duty(0.3f);
+        r_wheel.set_duty(0.3f);
     }
 
     if (current_tick % 4 == 0) { // 50 Hz
@@ -155,6 +160,25 @@ void periodic(float dt, int current_tick){
         });
     }
 
+}
+
+float calculateBalancePID(float dt){
+    float p = 0.0f;
+    float i = 0.0f;
+    float d = 0.0f;
+    float err = 0.0f;
+
+    err = sp_balance - imu.get_pitch();
+    
+    float p = err * k_p_balance;
+
+    integral_balance += err * dt_s;
+    float i = integral_balance * k_i_balance;
+
+    float d = (err - prev_err_balance) / dt_s * k_d_balance;
+    prev_err_balance = err;
+
+    return p + i + d;
 }
 
 double uptime_s() {
