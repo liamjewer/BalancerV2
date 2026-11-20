@@ -127,9 +127,9 @@ class Robot:
                 case "cppPong":
                     self.pipe_latency = (t_arrival - self.cpp_ping_time)/1000  # µs
                     self.hmi.send("cpp_lat", self.pipe_latency)
-                case "data":
+                case "telemetry":
                     self.hmi.send("uptime", time.clock_gettime(time.CLOCK_BOOTTIME)) # send pi uptime with it
-                    self.hmi.send("data", value)
+                    self.hmi.send("telemetry", value)
                 case _:
                     log.info(f"{msg_type}: {value}")
 
