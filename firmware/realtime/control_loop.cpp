@@ -15,12 +15,11 @@
 float k_p_balance = 0.12f; //tunable
 float k_i_balance = 0.0f; //tunable
 float k_d_balance = 0.0f; //tunable
-
+float sp_balance = 0.0f; //tunable and graphed
 float err_balance = 0.0f; //graphed
 float p_balance = 0.0f; //graphed
 float i_balance = 0.0f; //graphed
 float d_balance = 0.0f; //graphed
-float sp_balance = 0.0f; //graphed
 float output_balance = 0.0f; //graphed
 
 //history
@@ -143,6 +142,25 @@ void periodic(float dt, int current_tick){
             enabled = true;
             l_wheel.enable(); //enables both (STBY high)
             py.send("None", "Enabling!");
+        }else if(type == "tuning" && value.is_object() && value.size() == 1 && value.begin().value().is_number()){
+            const std::string key = value.begin().key();
+            const float val = value.begin().value().get<float>();
+
+            if (key == "left_pwm_deadband"){
+                l_wheel.pwm_deadband = val;
+            }else if (key == "right_pwm_deadband"){
+                r_wheel.pwm_deadband = val;
+            }else if (key == "imu_alpha"){
+                imu.alpha = val;
+            }else if (key == "k_p_balance"){
+                k_p_balance = val;
+            }else if (key == "k_i_balance"){
+                k_i_balance = val;
+            }else if (key == "k_d_balance"){
+                k_d_balance = val;
+            }else if (key == "sp_balance"){
+                sp_balance = val;
+            }
         }
     }
 

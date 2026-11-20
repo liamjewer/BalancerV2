@@ -28,6 +28,7 @@
   <script src="scripts/expand.js" defer></script>
   <script src="scripts/send.js" defer></script>
   <script src="scripts/graphing.js" defer></script>
+  <script src="scripts/tuning.js" defer></script>
 </head>
 <body>
 
@@ -156,20 +157,44 @@
           <tr>
             <td>Left Motor</td>
             <td>pwm deadband</td>
-            <td><input type="number" step="0.01" value="0"></td>
-            <td><button class="row-sync" data-constant="left_pwm_deadband" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
+            <td><input type="number" step="0.001" value="0"></td>
+            <td><button class="row-sync" data-constant="left_pwm_deadband"><i data-lucide="refresh-cw"></i></button></td>
           </tr>
           <tr>
             <td>Right Motor</td>
             <td>pwm deadband</td>
-            <td><input type="number" step="0.01" value="0"></td>
-            <td><button class="row-sync" data-constant="right_pwm_deadband" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
+            <td><input type="number" step="0.001" value="0"></td>
+            <td><button class="row-sync" data-constant="right_pwm_deadband"><i data-lucide="refresh-cw"></i></button></td>
           </tr>
           <tr>
             <td>IMU</td>
             <td>filter (α)</td>
-            <td><input type="number" step="0.01" value="0"></td>
-            <td><button class="row-sync" data-constant="filter_alpha" onclick="this.querySelector('svg').classList.toggle('spin')"><i data-lucide="refresh-cw"></i></button></td>
+            <td><input type="number" step="0.001" value="0"></td>
+            <td><button class="row-sync" data-constant="filter_alpha"><i data-lucide="refresh-cw"></i></button></td>
+          </tr>
+          <tr>
+            <td>Balance</td>
+            <td>Kp</td>
+            <td><input type="number" step="0.001" value="0"></td>
+            <td><button class="row-sync" data-constant="k_p_balance"><i data-lucide="refresh-cw"></i></button></td>
+          </tr>
+          <tr>
+            <td>Balance</td>
+            <td>Ki</td>
+            <td><input type="number" step="0.001" value="0"></td>
+            <td><button class="row-sync" data-constant="k_i_balance"><i data-lucide="refresh-cw"></i></button></td>
+          </tr>
+          <tr>
+            <td>Balance</td>
+            <td>Kd</td>
+            <td><input type="number" step="0.001" value="0"></td>
+            <td><button class="row-sync" data-constant="k_d_balance"><i data-lucide="refresh-cw"></i></button></td>
+          </tr>
+          <tr>
+            <td>Balance</td>
+            <td>sp</td>
+            <td><input type="number" step="0.001" value="0"></td>
+            <td><button class="row-sync" data-constant="sp_balance"><i data-lucide="refresh-cw"></i></button></td>
           </tr>
         </tbody>
       </table>

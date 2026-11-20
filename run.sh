@@ -1,0 +1,1 @@
+./firmware/venv/bin/python firmware/robot/main.py
