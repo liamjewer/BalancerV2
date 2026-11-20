@@ -48,34 +48,39 @@ header {
 }
 
 #connection{
-  color: var(--green);
-  display: inline-block;
-  vertical-align: bottom;
-  box-sizing: content-box;
-  font-size: 30px;
-  width: 90pt;
-  overflow: hidden;
-  white-space: nowrap;
+    color: var(--green);
+    display: inline-block;
+    vertical-align: bottom;
+    box-sizing: content-box;
+    font-size: 30px;
+    width: 90pt;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 #connection:not(.connected) {
   color: var(--red);
-  animation: disconnect 1.2s ease-in-out infinite;
+  animation: disconnect 1.2s ease-in infinite;
+}
+
+#connection.busy {
+    width: auto;
+    animation: busy 5s ease-in-out infinite;
 }
 
 #connection.connected {
-  animation: none;
+    animation: none;
 }
 
 #battery{
-  display: inline-flex;
-  align-items: center;
-  height: 30px;
-  aspect-ratio: 500/200;
-  font-size: 8pt;
-  font-weight: bold;
-  background: linear-gradient(90deg, var(--blue) 50%, var(--bg) 50%);
-  text-indent: 3px;
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+    aspect-ratio: 500/200;
+    font-size: 8pt;
+    font-weight: bold;
+    background: linear-gradient(90deg, var(--blue) 50%, var(--bg) 50%);
+    text-indent: 3px;
 }
 
 /* ---- Main grid ---- */
@@ -241,6 +246,7 @@ main {
 
 #timing {
     display: flex;
+    flex-direction: column;
     grid-area: timing;
     padding: 15px;
 }
@@ -251,12 +257,12 @@ main {
 }
 
 #state div, #timing div {
-    font-size: 8pt;
+    font-size: 6pt;
     padding: 5%;
 }
 
 #state span, #timing span {
-    font-size: 14pt;
+    font-size: 12pt;
     padding: 5% 0;
 }
 
@@ -710,6 +716,13 @@ input[type="range"] {
 @keyframes disconnect {
   0%, 100% { width: 0; margin-right: 90pt;}
   50%      { width: 90pt; margin-right: 0;}
+}
+
+@keyframes busy {
+  0%, 100% { transform: rotate(0deg);}
+  40%      { transform: rotate(180deg);}
+  60%      { transform: rotate(180deg);}
+  80%      { transform: rotate(0deg);}
 }
 
 @keyframes send {

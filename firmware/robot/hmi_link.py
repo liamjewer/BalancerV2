@@ -14,6 +14,10 @@ class HMILink:
         self.loop = None
 
     async def _handler(self, websocket):
+        if self.clients:  # someone is already connected
+            await websocket.close(code=1013, reason="busy")
+            return
+
         self.clients.add(websocket)
         try:
             async for raw in websocket:

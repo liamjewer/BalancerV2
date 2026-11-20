@@ -107,8 +107,7 @@ bool Wheel::init() {
 void Wheel::set_duty(float duty) {
     if (!dir_request) return; // init() not done
 
-    duty = std::clamp(duty, -1.0f, 1.0f);
-    if (cfg.invert_motor) duty = -duty;
+    duty = -(std::clamp(duty, -1.0f, 1.0f));
 
     float magnitude = std::fabs(duty);
     if (magnitude > 0.0f)

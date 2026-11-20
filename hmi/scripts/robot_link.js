@@ -106,15 +106,20 @@ ws.onmessage = (event) => {
   }
 };
 
-ws.onclose = () => {
-  console.log("disconnected");
+ws.onclose = (e) => {
+  console.log("disconnected", e.code);
+
+  if (e.code === 1013) {
+    displayBusy();
+    return;
+  }
 
   displayDisconnected();
 };
 
 ws.onerror = (err) => {
   console.log("error", err);
-
+  
   displayDisconnected();
 };
   
@@ -126,13 +131,23 @@ function send(type, value) {
 
 function displayConnected(){
   connectionIndicator.classList.add("connected");
+  connectionIndicator.classList.remove("busy");
   connectionIndicator.getElementsByTagName("svg")[0].setAttribute('data-lucide', 'globe');
+
+  lucide.createIcons(); //re-render
+}
+
+function displayBusy(){
+  connectionIndicator.classList.remove("connected");
+  connectionIndicator.classList.add("busy"); 
+  connectionIndicator.getElementsByTagName("svg")[0].setAttribute('data-lucide', 'hourglass');
 
   lucide.createIcons(); //re-render
 }
 
 function displayDisconnected(){
   connectionIndicator.classList.remove("connected");
+  connectionIndicator.classList.add("busy");
   connectionIndicator.getElementsByTagName("svg")[0].setAttribute('data-lucide', 'globe-off');
 
   lucide.createIcons(); //re-render

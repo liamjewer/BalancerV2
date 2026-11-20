@@ -50,7 +50,6 @@ inline WheelConfig right_wheel_config() {
     c.in1_pin = 16; // BIN1
     c.in2_pin = 20; // BIN2
     c.wheel_radius_m = 0.0335f;
-    c.invert_motor = false; // mirror right wheel
     c.invert_encoder = true;
     return c;
 }
@@ -163,19 +162,14 @@ void periodic(float dt, int current_tick){
 }
 
 float calculateBalancePID(float dt){
-    float p = 0.0f;
-    float i = 0.0f;
-    float d = 0.0f;
-    float err = 0.0f;
-
-    err = sp_balance - imu.get_pitch();
+    float err = sp_balance - imu.get_pitch();
     
     float p = err * k_p_balance;
 
-    integral_balance += err * dt_s;
+    integral_balance += err * dt;
     float i = integral_balance * k_i_balance;
 
-    float d = (err - prev_err_balance) / dt_s * k_d_balance;
+    float d = (err - prev_err_balance) / dt * k_d_balance;
     prev_err_balance = err;
 
     return p + i + d;
