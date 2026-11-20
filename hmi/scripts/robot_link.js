@@ -147,7 +147,7 @@ function displayBusy(){
 
 function displayDisconnected(){
   connectionIndicator.classList.remove("connected");
-  connectionIndicator.classList.add("busy");
+  connectionIndicator.classList.remove("busy");
   connectionIndicator.getElementsByTagName("svg")[0].setAttribute('data-lucide', 'globe-off');
 
   lucide.createIcons(); //re-render

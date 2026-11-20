@@ -12,11 +12,17 @@
 #include <nlohmann/json.hpp>
 
 // constants
-float k_p_balance = 0.1f; //tunable
+float k_p_balance = 0.12f; //tunable
 float k_i_balance = 0.0f; //tunable
 float k_d_balance = 0.0f; //tunable
 
-float sp_balance = 0.0f; //tunable
+float err_balance = 0.0f; //graphed
+float p_balance = 0.0f; //graphed
+float i_balance = 0.0f; //graphed
+float d_balance = 0.0f; //graphed
+float sp_balance = 0.0f; //graphed
+float output_balance = 0.0f; //graphed
+
 //history
 float integral_balance = 0.0f;
 float prev_err_balance = 0.0f;
@@ -115,6 +121,8 @@ void init(){
     if (!l_ok || !r_ok) { //handle errors
         py.send("info", "wheel init failed");
     }
+    l_wheel.pwm_deadband = 0.03;
+    r_wheel.pwm_deadband = 0.02;
     //start at 0
     l_wheel.set_duty(0.0f);
     r_wheel.set_duty(0.0f);
@@ -141,38 +149,48 @@ void periodic(float dt, int current_tick){
     //update pitch
     imu.update(&dt);
 
+    if(enabled){
+        output_balance = calculate_balance_PID(dt);
+
+        l_wheel.set_duty(output_balance);
+        r_wheel.set_duty(output_balance);
+    }
+
     // call motor periodics
     l_wheel.periodic(&dt);
     r_wheel.periodic(&dt);
 
-    if(enabled){
-        l_wheel.set_duty(0.3f);
-        r_wheel.set_duty(0.3f);
-    }
 
+    //send telemetry
     if (current_tick % 4 == 0) { // 50 Hz
         py.send("telemetry", {
             {"t", uptime_s()},
             {"tilt", imu.get_pitch()},
             {"rspeed", r_wheel.get_speed()},
-            {"lspeed", l_wheel.get_speed()}
+            {"lspeed", l_wheel.get_speed()},
+            {"err",    err_balance},
+            {"p",      p_balance},
+            {"i",      i_balance},
+            {"d",      d_balance},
+            {"sp_balance", sp_balance},
+            {"output_balance_duty", output_balance}
         });
     }
 
 }
 
-float calculateBalancePID(float dt){
-    float err = sp_balance - imu.get_pitch();
+float calculate_balance_PID(float dt){
+    err_balance = sp_balance - imu.get_pitch();
     
-    float p = err * k_p_balance;
+    p_balance = err_balance * k_p_balance;
 
-    integral_balance += err * dt;
-    float i = integral_balance * k_i_balance;
+    integral_balance += err_balance * dt;
+    i_balance = integral_balance * k_i_balance;
 
-    float d = (err - prev_err_balance) / dt * k_d_balance;
-    prev_err_balance = err;
+    d_balance = (err_balance - prev_err_balance) / dt * k_d_balance;
+    prev_err_balance = err_balance;
 
-    return p + i + d;
+    return p_balance + i_balance + d_balance;
 }
 
 double uptime_s() {
