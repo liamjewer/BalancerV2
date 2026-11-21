@@ -13,6 +13,9 @@
 #include <nlohmann/json.hpp>
 
 // constants
+const float batt_nominal = 11.1; //V (3s LiPo)
+float v_batt_filtered = batt_nominal;
+
 float k_p_balance = 0.12f; //tunable
 float k_i_balance = 0.0f; //tunable
 float k_d_balance = 0.0f; //tunable
@@ -166,6 +169,9 @@ void periodic(float dt, int current_tick){
             }
             
             save_tuning();
+        }else if(type == "bat"){
+            const float val = value.begin().value().get<float>();
+            v_batt_filtered = 0.9 * v_batt_filtered + 0.1 * val;
         }
     }
 
@@ -175,8 +181,9 @@ void periodic(float dt, int current_tick){
     if(enabled){
         output_balance = calculate_balance_PID(dt);
 
-        l_wheel.set_duty(output_balance);
-        r_wheel.set_duty(output_balance);
+        const float batt_comp_factor = batt_nominal / v_batt_filtered;
+        l_wheel.set_duty(output_balance*batt_comp_factor);
+        r_wheel.set_duty(output_balance*batt_comp_factor);
     }
 
     // call motor periodics

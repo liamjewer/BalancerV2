@@ -28,7 +28,7 @@ HMI_PORT = 3683
 CAMERA_PORT = 2609
 
 # timing
-LOOP_HZ = 100
+LOOP_HZ = 75
 LOOP_PERIOD = 1.0 / LOOP_HZ
 
 # pin numbers (BCM)
@@ -147,6 +147,8 @@ class Robot:
                     log.info(f"{msg_type}: {value}")
 
             current_ctrl_msg = self.control_loop.get_next_msg()
+
+        self.control_loop.send("bat", self.battery.get_voltage()); // send battery to control loop
 
         # check for hmi messages and handle them
         current_hmi_msg = self.hmi.get_next_msg()
